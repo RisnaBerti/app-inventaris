@@ -50,7 +50,14 @@
                                         <td class="fw-bold">{{ __('Alamat') }}</td>
                                         <td>{{ $pegawai->alamat }}</td>
                                     </tr>
-
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Jenjang') }}</td>
+                                        <td>{{ $pegawai->jenis_jenjang }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Nama Sekolah') }}</td>
+                                        <td>{{ $pegawai->nama_sekolah }}</td>
+                                    </tr>
                                 </table>
                             </div>
 

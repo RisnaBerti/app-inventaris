@@ -111,7 +111,10 @@ class PelaporanController extends Controller
         $data = Transak::with(['barang', 'ruangan'])
             ->get();
 
-        return view('pelaporans.create', compact('data'));
+
+        return view('pelaporans.create', ['data' => $data, 'pelaporan' => null]);
+
+        // return view('pelaporans.create', compact('data'));
     }
 
     /**

@@ -43,6 +43,8 @@
                                             <th>{{ __('Jabatan') }}</th>
                                             <th>{{ __('No Tlpn') }}</th>
                                             <th>{{ __('Alamat') }}</th>
+                                            <th>{{ __('Jenjang') }}</th>
+                                            <th>{{ __('Nama Sekolah') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -88,6 +90,14 @@
                 {
                     data: 'alamat',
                     name: 'alamat',
+                },
+                {
+                    data: 'jenis_jenjang',
+                    name: 'jenis_jenjang',
+                },
+                {
+                    data: 'nama_sekolah',
+                    name: 'nama_sekolah',
                 },
                 {
                     data: 'action',

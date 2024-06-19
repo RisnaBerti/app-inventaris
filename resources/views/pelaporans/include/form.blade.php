@@ -1,62 +1,4 @@
 <div class="row mb-2">
-    {{-- <div class="col-md-6">
-        <div class="form-group">
-            <label for="barang-id">{{ __('Barang') }}</label>
-            <select class="form-select @error('barang_id') is-invalid @enderror" name="barang_id" id="barang-id" class="form-control" required>
-                <option value="" selected disabled>-- {{ __('Select barang') }} --</option>
-                
-                        @foreach ($barangs as $barang)
-                            <option value="{{ $barang->id }}" {{ isset($pelaporan) && $pelaporan->barang_id == $barang->id ? 'selected' : (old('barang_id') == $barang->id ? 'selected' : '') }}>
-                                {{ $barang->nama_barang }}
-                            </option>
-                        @endforeach
-            </select>
-            @error('barang_id')
-                <span class="text-danger">
-                    {{ $message }}
-                </span>
-            @enderror
-        </div>
-    </div> --}}
-    {{-- <div class="col-md-6">
-        <div class="form-group">
-            <label for="ruangan-id">{{ __('Ruangan') }}</label>
-            <select class="form-select @error('ruangan_id') is-invalid @enderror" name="ruangan_id" id="ruangan-id" class="form-control" required>
-                <option value="" selected disabled>-- {{ __('Select ruangan') }} --</option>
-                
-                        @foreach ($ruangans as $ruangan)
-                            <option value="{{ $ruangan->id }}" {{ isset($pelaporan) && $pelaporan->ruangan_id == $ruangan->id ? 'selected' : (old('ruangan_id') == $ruangan->id ? 'selected' : '') }}>
-                                {{ $ruangan->nama_ruangan }}
-                            </option>
-                        @endforeach
-            </select>
-            @error('ruangan_id')
-                <span class="text-danger">
-                    {{ $message }}
-                </span>
-            @enderror
-        </div>
-    </div> --}}
-    {{-- <div class="col-md-6">
-        <div class="form-group">
-            <label for="transak-id">{{ __('Transak') }}</label>
-            <select class="form-select @error('transak_id') is-invalid @enderror" name="transak_id" id="transak-id" class="form-control" required>
-                <option value="" selected disabled>-- {{ __('Select transak') }} --</option>
-                
-                        @foreach ($transaks as $transak)
-                            <option value="{{ $transak->id }}" {{ isset($pelaporan) && $pelaporan->transak_id == $transak->id ? 'selected' : (old('transak_id') == $transak->id ? 'selected' : '') }}>
-                                {{ $transak->barang_id }}
-                            </option>
-                        @endforeach
-            </select>
-            @error('transak_id')
-                <span class="text-danger">
-                    {{ $message }}
-                </span>
-            @enderror
-        </div>
-    </div> --}}
-
     <div class="col-md-12">
         <div class="form-group">
             <label for="transak-id">{{ __('Transak') }}</label>
@@ -64,11 +6,16 @@
                     class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select transak') }} --</option>
     
-                @foreach ($data as $transak)
+                {{-- @foreach ($data as $transak)
                     <option value="{{ $transak->id }}"
                             {{ old('transak_id', $pelaporan->transak_id) == $transak->id ? 'selected' : '' }}>
                         {{ $transak->barang->nama_barang }} - {{ $transak->barang->kode_barang }} - {{ $transak->ruangan->nama_ruangan }} -
                         {{ $transak->tahun_akademik }} - {{ $transak->jml_mutasi }} - {{ $transak->jenis_mutasi }} - {{ date('F/Y', strtotime($transak->periode)) }}
+                    </option>
+                @endforeach --}}
+                @foreach ($data as $transak)
+                    <option value="{{ $transak->id }}" {{ old('transak_id', $pelaporan->transak_id ?? '') == $transak->id ? 'selected' : '' }}>
+                        {{ $transak->barang->nama_barang }} - {{ $transak->barang->kode_barang }} - {{ $transak->ruangan->nama_ruangan }} - {{ $transak->tahun_akademik }} - {{ $transak->jml_mutasi }} - {{ $transak->jenis_mutasi }} - {{ date('F/Y', strtotime($transak->periode)) }}
                     </option>
                 @endforeach
             </select>

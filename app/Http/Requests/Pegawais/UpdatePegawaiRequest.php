@@ -24,6 +24,8 @@ class UpdatePegawaiRequest extends FormRequest
 			'jabatan' => 'required|string|max:50',
 			'no_tlpn' => 'nullable|string|max:15',
 			'alamat' => 'nullable|string|max:100',
+            'jenis_jenjang' => 'nullable|string|max:50',
+            'nama_sekolah' => 'nullable|string|max:50',
         ];
     }
 }

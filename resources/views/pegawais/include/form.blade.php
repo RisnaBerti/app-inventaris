@@ -51,4 +51,26 @@
             @enderror
         </div>
     </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="jenis-jenjang">{{ __('Jenjang') }}</label>
+            <input type="text" name="jenis_jenjang" id="jenis-jenis_jenjang" class="form-control @error('jenis_jenjang') is-invalid @enderror" value="{{ (isset($pegawai) ? $pegawai->jenis_jenjang : old('jenis_jenjang')) ? old('jenis_jenjang') : '-' }}" placeholder="{{ __('Jenjang') }}" />
+            @error('jenis_jenjang')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="nama-sekolah">{{ __('Nama Sekolah') }}</label>
+            <input type="text" name="nama_sekolah" id="nama-sekolah" class="form-control @error('nama_sekolah') is-invalid @enderror" value="{{ (isset($pegawai) ? $pegawai->nama_sekolah : old('nama_sekolah')) ? old('nama_sekolah') : '-' }}" placeholder="{{ __('Nama Sekolah') }}" />
+            @error('nama_sekolah')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div>
 </div>

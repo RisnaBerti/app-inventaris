@@ -21,14 +21,29 @@ class Pegawai extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['user_id', 'jabatan', 'no_tlpn', 'alamat'];
+    protected $fillable = [
+        'user_id', 
+        'jabatan', 
+        'no_tlpn', 
+        'alamat', 
+        'jenis_jenjang',
+        'nama_sekolah',
+    ];
 
     /**
      * The attributes that should be cast.
      *
      * @var string[]
      */
-    protected $casts = ['jabatan' => 'string', 'no_tlpn' => 'string', 'alamat' => 'string', 'created_at' => 'datetime:d/m/Y H:i', 'updated_at' => 'datetime:d/m/Y H:i'];
+    protected $casts = [
+        'jabatan' => 'string', 
+        'no_tlpn' => 'string', 
+        'alamat' => 'string', 
+        'jenis_jenjang' => 'string',
+        'nama_sekolah' => 'string',
+        'created_at' => 'datetime:d/m/Y H:i', 
+        'updated_at' => 'datetime:d/m/Y H:i'
+    ];
     
 
 	public function user()

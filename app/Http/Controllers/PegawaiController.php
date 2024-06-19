@@ -35,6 +35,8 @@ class PegawaiController extends Controller
                 'pegawais.jabatan',
                 'pegawais.alamat',
                 'pegawais.no_tlpn',
+                'pegawais.jenis_jenjang',
+                'pegawais.nama_sekolah',
                 'users.name AS user_name'
             )
                 ->join('users', 'users.id', '=', 'pegawais.user_id')
