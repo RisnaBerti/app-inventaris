@@ -145,8 +145,8 @@
                     name: 'jml_hilang',
                 },
                 {
-                    data: 'jml_mutasi',
-                    name: 'jml_mutasi',
+                    data: 'total_barang',
+                    name: 'total_barang',
                 },
                 {
                     data: 'keterangan',

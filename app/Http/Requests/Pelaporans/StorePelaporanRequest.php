@@ -29,6 +29,7 @@ class StorePelaporanRequest extends FormRequest
 			'jml_rusak_berat' => 'nullable|numeric',
 			'jml_hilang' => 'nullable|numeric',
 			'keterangan' => 'nullable|string',
+            'total_barang' => 'nullable|numeric',
         ];
     }
 }

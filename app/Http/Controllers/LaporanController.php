@@ -7,6 +7,7 @@ use App\Models\Ruangan;
 use App\Models\Pelaporan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Barang;
 use Yajra\DataTables\Facades\DataTables;
 
 class LaporanController extends Controller
@@ -149,4 +150,17 @@ class LaporanController extends Controller
 
         return view('laporans.print', compact('inventaris', 'ruangan', 'tahun_akademik', 'kepsek_name', 'sapras_name'));
     }
+
+    //fungsi dashboard
+    public function dashboard()
+    {
+        //get total jml barang
+        $total_barang = Barang::count();
+        //get total jml ruangan
+        $total_ruangan = Ruangan::count();
+        //get total jml user
+        $total_user = Pegawai::count();
+
+        return view('dashboard', compact('total_barang', 'total_ruangan', 'total_user'));
+            }
 }

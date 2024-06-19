@@ -110,11 +110,12 @@ class TransakController extends Controller
             $barang = \App\Models\Barang::find($request->barang_id);
             $barang->jml_barang += $request->jml_mutasi;
             $barang->save();
-        } elseif ($request->jenis_mutasi == 'Barang Keluar') {
-            $barang = \App\Models\Barang::find($request->barang_id);
-            $barang->jml_barang -= $request->jml_mutasi;
-            $barang->save();
-        }
+        } 
+        // elseif ($request->jenis_mutasi == 'Barang Keluar') {
+        //     $barang = \App\Models\Barang::find($request->barang_id);
+        //     $barang->jml_barang -= $request->jml_mutasi;
+        //     $barang->save();
+        // }
 
         return to_route('transaks.index')->with('success', __('The transak was created successfully.'));
     }
@@ -157,16 +158,18 @@ class TransakController extends Controller
         // Revert the changes made by the original transaction
         if ($originalJenisMutasi == 'Barang Masuk') {
             $barang->jml_barang -= $originalJmlMutasi;
-        } elseif ($originalJenisMutasi == 'Barang Keluar') {
-            $barang->jml_barang += $originalJmlMutasi;
-        }
+        } 
+        // elseif ($originalJenisMutasi == 'Barang Keluar') {
+        //     $barang->jml_barang += $originalJmlMutasi;
+        // }
 
         // Apply the changes based on the updated transaction
         if ($request->jenis_mutasi == 'Barang Masuk') {
             $barang->jml_barang += $request->jml_mutasi;
-        } elseif ($request->jenis_mutasi == 'Barang Keluar') {
-            $barang->jml_barang -= $request->jml_mutasi;
-        }
+        } 
+        // elseif ($request->jenis_mutasi == 'Barang Keluar') {
+        //     $barang->jml_barang -= $request->jml_mutasi;
+        // }
 
         $barang->save();
 

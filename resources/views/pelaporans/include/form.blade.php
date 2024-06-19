@@ -57,7 +57,6 @@
         </div>
     </div> --}}
 
-
     <div class="col-md-12">
         <div class="form-group">
             <label for="transak-id">{{ __('Transak') }}</label>
@@ -67,7 +66,7 @@
     
                 @foreach ($data as $transak)
                     <option value="{{ $transak->id }}"
-                            {{ old('transak_id') == $transak->id ? 'selected' : '' }}>
+                            {{ old('transak_id', $pelaporan->transak_id) == $transak->id ? 'selected' : '' }}>
                         {{ $transak->barang->nama_barang }} - {{ $transak->barang->kode_barang }} - {{ $transak->ruangan->nama_ruangan }} -
                         {{ $transak->tahun_akademik }} - {{ $transak->jml_mutasi }} - {{ $transak->jenis_mutasi }} - {{ date('F/Y', strtotime($transak->periode)) }}
                     </option>
@@ -79,7 +78,7 @@
             </span>
             @enderror
         </div>
-    </div>  
+    </div>
     
     <div class="col-md-6">
         <div class="form-group">

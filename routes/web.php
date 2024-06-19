@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,8 +19,11 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'web'])->group(function () {
-    Route::get('/', fn () => view('dashboard'));
-    Route::get('/dashboard', fn () => view('dashboard'));
+    // Route::get('/', fn () => view('dashboard'));
+    // Route::get('/dashboard', fn () => view('dashboard'));
+
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/profile', App\Http\Controllers\ProfileController::class)->name('profile');
 

@@ -87,7 +87,7 @@
     <div class="col-md-6">
         <div class="form-group">
             <label for="jml-barang">{{ __('Jml Barang') }}</label>
-            <input type="number" name="jml_barang" id="jml-barang" class="form-control @error('jml_barang') is-invalid @enderror" value="{{ isset($barang) ? $barang->jml_barang : old('jml_barang') }}" placeholder="{{ __('Jml Barang') }}" required />
+            <input type="number" name="jml_barang" id="jml-barang" class="form-control @error('jml_barang') is-invalid @enderror" value="{{ isset($barang) ? $barang->jml_barang : old('jml_barang') }}" placeholder="{{ __('Jml Barang') }}" value="0" required readonly  />
             @error('jml_barang')
                 <span class="text-danger">
                     {{ $message }}

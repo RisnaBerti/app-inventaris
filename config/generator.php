@@ -115,11 +115,10 @@ return [
             'test view',
             'barang view',
             'ruangan view',
-            'mutasi view',
-            'transaksi view',
             'transak view',
-            'inventor view',
-            'pelaporan view'
+            'pelaporan view',
+            'laporan view',
+            'dashboard view'
         ],
         'menus' => [
             [
@@ -135,6 +134,14 @@ return [
                 'icon' => '<i class="bi bi-journal-text"></i>',
                 'route' => '/ruangans',
                 'permission' => 'ruangan view',
+                'permissions' => [],
+                'submenus' => []
+            ],
+            [
+                'title' => 'Transaksi',
+                'icon' => '<i class="bi bi-journal-text"></i>',
+                'route' => '/transaks',
+                'permission' => 'transak view',
                 'permissions' => [],
                 'submenus' => []
             ],

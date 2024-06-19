@@ -62,11 +62,11 @@ class PelaporanController extends Controller
                     ->with('barang:id,nama_barang,kode_barang,merk_model,ukuran,bahan,tahun_pembuatan_pembelian')
                     ->with('ruangan:id,nama_ruangan');
             }])
-            ->join('transaks', 'pelaporans.transak_id', '=', 'transaks.id')
-            ->join('barangs', 'transaks.barang_id', '=', 'barangs.id')
-            ->join('ruangans', 'transaks.ruangan_id', '=', 'ruangans.id')
-            ->select('pelaporans.*', 'barangs.nama_barang', 'barangs.kode_barang', 'barangs.merk_model', 'barangs.ukuran', 'barangs.bahan', 'barangs.tahun_pembuatan_pembelian', 'ruangans.nama_ruangan', 'transaks.tahun_akademik', 'transaks.jml_mutasi');
-            
+                ->join('transaks', 'pelaporans.transak_id', '=', 'transaks.id')
+                ->join('barangs', 'transaks.barang_id', '=', 'barangs.id')
+                ->join('ruangans', 'transaks.ruangan_id', '=', 'ruangans.id')
+                ->select('pelaporans.*', 'barangs.nama_barang', 'barangs.kode_barang', 'barangs.merk_model', 'barangs.ukuran', 'barangs.bahan', 'barangs.tahun_pembuatan_pembelian', 'ruangans.nama_ruangan', 'transaks.tahun_akademik', 'transaks.jml_mutasi');
+
             return DataTables::of($pelaporans)
                 ->addColumn('nama_barang', function ($row) {
                     return $row->nama_barang ?? '';
@@ -98,7 +98,6 @@ class PelaporanController extends Controller
                 ->addColumn('action', 'pelaporans.include.action')
                 ->addIndexColumn()
                 ->toJson();
-            
         }
 
         return view('pelaporans.index');
@@ -109,13 +108,8 @@ class PelaporanController extends Controller
      */
     public function create(): \Illuminate\Contracts\View\View
     {
-        $data = Transak::with(['barang', 'ruangan']) 
-            ->get(); 
-
-        // $data = Transak::where('jenis_mutasi', 'Barang Keluar')
-        //     ->with('barang:id,nama_barang,kode_barang,merk_model,ukuran,bahan,tahun_pembuatan_pembelian')
-        //     ->with('ruangan:id,nama_ruangan')
-        //     ->get();
+        $data = Transak::with(['barang', 'ruangan'])
+            ->get();
 
         return view('pelaporans.create', compact('data'));
     }
@@ -125,8 +119,15 @@ class PelaporanController extends Controller
      */
     public function store(StorePelaporanRequest $request): \Illuminate\Http\RedirectResponse
     {
+        $data = $request->validated(); // ambil semua data yang telah divalidasi
 
-        Pelaporan::create($request->validated());
+        // Hitung total_barang dan tambahkan ke dalam data yang akan disimpan
+        $total_barang = $request->jml_hilang + $request->jml_baik + $request->jml_kurang_baik + $request->jml_rusak_berat;
+        $data['total_barang'] = $total_barang;
+
+        Pelaporan::create($data); // simpan data ke dalam database
+
+        // Pelaporan::create($request->validated());
 
         return to_route('pelaporans.index')->with('success', __('The pelaporan was created successfully.'));
     }
@@ -148,7 +149,10 @@ class PelaporanController extends Controller
     {
         $pelaporan->load('barang:id,nama_barang', 'ruangan:id,nama_ruangan', 'transak:id,tahun_akademik');
 
-        return view('pelaporans.edit', compact('pelaporan'));
+        $data = Transak::with(['barang', 'ruangan'])
+            ->get();
+
+        return view('pelaporans.edit', compact('pelaporan', 'data'));
     }
 
     /**
@@ -156,8 +160,11 @@ class PelaporanController extends Controller
      */
     public function update(UpdatePelaporanRequest $request, Pelaporan $pelaporan): \Illuminate\Http\RedirectResponse
     {
+        // Hitung total_barang
+        $total_barang = $request->jml_hilang + $request->jml_baik + $request->jml_kurang_baik + $request->jml_rusak_berat;
 
-        $pelaporan->update($request->validated());
+        // Update data pelaporan dengan menambahkan total_barang ke dalam data yang akan disimpan
+        $pelaporan->update(array_merge($request->validated(), ['total_barang' => $total_barang]));
 
         return to_route('pelaporans.index')->with('success', __('The pelaporan was updated successfully.'));
     }
