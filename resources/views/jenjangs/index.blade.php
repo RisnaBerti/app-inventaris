@@ -1,20 +1,20 @@
 @extends('layouts.app')
 
-@section('title', __('Ruangans'))
+@section('title', __('Jenjangs'))
 
 @section('content')
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-8 order-md-1 order-last">
-                    <h3>{{ __('Ruangan') }}</h3>
+                    <h3>{{ __('Jenjang') }}</h3>
                     <p class="text-subtitle text-muted">
-                        {{ __('List semua data ruangan.') }}
+                        {{ __('List semua data jenjang.') }}
                     </p>
                 </div>
                 <x-breadcrumb>
                     <li class="breadcrumb-item"><a href="/">{{ __('Dashboard') }}</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ __('Ruangan') }}</li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ __('Jenjang') }}</li>
                 </x-breadcrumb>
             </div>
         </div>
@@ -22,9 +22,9 @@
         <section class="section">
             <x-alert></x-alert>
 
-                @can('ruangan create')
+                @can('jenjang create')
                     <div class="d-flex justify-content-end">
-                        <a href="{{ route('ruangans.create') }}" class="btn btn-primary mb-3">
+                        <a href="{{ route('jenjangs.create') }}" class="btn btn-primary mb-3">
                             <i class="fas fa-plus"></i>
                             {{ __('Tambah Data') }}
                         </a>
@@ -39,9 +39,8 @@
                                 <table class="table table-striped" id="data-table" width="100%">
                                     <thead>
                                         <tr>
-                                            <th>{{ __('No') }}</th>
-                                            <th>{{ __('Nama Jenjang') }}</th>
-                                            <th>{{ __('Nama Ruangan') }}</th>
+                                            <th>{{ __('Kode Jenjang') }}</th>
+											<th>{{ __('Nama Jenjang') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -67,20 +66,15 @@
         $('#data-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('ruangans.index') }}",
-            columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'DT_RowIndex',
-                    orderable: false,
-                    searchable: false
-                },
+            ajax: "{{ route('jenjangs.index') }}",
+            columns: [
                 {
+                    data: 'kode_jenjang',
+                    name: 'kode_jenjang',
+                },
+				{
                     data: 'nama_jenjang',
                     name: 'nama_jenjang',
-                },
-                {
-                    data: 'nama_ruangan',
-                    name: 'nama_ruangan',
                 },
                 {
                     data: 'action',

@@ -196,6 +196,22 @@ return [
                 'submenus' => []
             ]
         ]
+    ],
+    [
+        'header' => 'Data Masters',
+        'permissions' => [
+            'jenjang view'
+        ],
+        'menus' => [
+            [
+                'title' => 'Jenjangs',
+                'icon' => '<i class="bi bi-journal-text"></i>',
+                'route' => '/jenjangs',
+                'permission' => 'jenjang view',
+                'permissions' => [],
+                'submenus' => []
+            ]
+        ]
     ]
 ]
 ];

@@ -21,13 +21,14 @@ class StoreBarangRequest extends FormRequest
     {
         return [
             'nama_barang' => 'required|string|max:50',
-			'kode_barang' => 'required|string|max:15',
-			'merk_model' => 'required|string|max:25',
-			'ukuran' => 'required|string|max:25',
-			'bahan' => 'required|string|max:25',
-			'tahun_pembuatan_pembelian' => 'required|numeric',
-			'satuan' => 'required|string|max:25',
-			'jml_barang' => 'required|numeric',
+            'kode_barang' => 'required|string|max:15',
+            'merk_model' => 'required|string|max:25',
+            'ukuran' => 'required|string|max:25',
+            'bahan' => 'required|string|max:25',
+            'tahun_pembuatan_pembelian' => 'required|numeric',
+            'satuan' => 'required|string|max:25',
+            'jml_barang' => 'required|numeric',
+            'foto_barang' => 'nullable|mimes:jpeg,png,jpg,pdf|max:2048'
         ];
     }
 }

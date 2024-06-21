@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Ruangans;
+namespace App\Http\Requests\Jenjangs;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRuanganRequest extends FormRequest
+class StoreJenjangRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -20,8 +20,8 @@ class StoreRuanganRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_ruangan' => 'required|string|max:25',
-            'jenjang_id' => 'required|exists:App\Models\Jenjang,id',
+            'kode_jenjang' => 'required|string|max:25',
+			'nama_jenjang' => 'required|string|max:10',
         ];
     }
 }

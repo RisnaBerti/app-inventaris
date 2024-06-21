@@ -5,14 +5,6 @@
             <select class="form-select @error('transak_id') is-invalid @enderror" name="transak_id" id="transak-id"
                     class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select transak') }} --</option>
-    
-                {{-- @foreach ($data as $transak)
-                    <option value="{{ $transak->id }}"
-                            {{ old('transak_id', $pelaporan->transak_id) == $transak->id ? 'selected' : '' }}>
-                        {{ $transak->barang->nama_barang }} - {{ $transak->barang->kode_barang }} - {{ $transak->ruangan->nama_ruangan }} -
-                        {{ $transak->tahun_akademik }} - {{ $transak->jml_mutasi }} - {{ $transak->jenis_mutasi }} - {{ date('F/Y', strtotime($transak->periode)) }}
-                    </option>
-                @endforeach --}}
                 @foreach ($data as $transak)
                     <option value="{{ $transak->id }}" {{ old('transak_id', $pelaporan->transak_id ?? '') == $transak->id ? 'selected' : '' }}>
                         {{ $transak->barang->nama_barang }} - {{ $transak->barang->kode_barang }} - {{ $transak->ruangan->nama_ruangan }} - {{ $transak->tahun_akademik }} - {{ $transak->jml_mutasi }} - {{ $transak->jenis_mutasi }} - {{ date('F/Y', strtotime($transak->periode)) }}

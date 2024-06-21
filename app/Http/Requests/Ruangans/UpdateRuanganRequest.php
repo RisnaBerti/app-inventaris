@@ -21,6 +21,7 @@ class UpdateRuanganRequest extends FormRequest
     {
         return [
             'nama_ruangan' => 'required|string|max:25',
+            'jenjang_id' => 'required|exists:App\Models\Jenjang,id',
         ];
     }
 }

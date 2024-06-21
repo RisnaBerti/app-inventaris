@@ -57,23 +57,37 @@ class TransakController extends Controller
 
             $transaks = Transak::select([
                 'transaks.id AS id_transaksi',
+                'transaks.no_inventaris',
+                'transaks.jenis_pengadaan',
                 'transaks.tgl_mutasi',
                 'transaks.jenis_mutasi',
                 'transaks.tahun_akademik',
                 'transaks.periode',
                 'transaks.jml_mutasi',
                 'transaks.tempat_asal',
+                'transaks.qrcode',
                 'barangs.id AS id_barang',
                 'barangs.nama_barang',
                 'barangs.kode_barang',
                 'ruangans.id AS id_ruangan',
                 'ruangans.nama_ruangan',
+                'ruangans.jenjang_id',
+                'jenjangs.nama_jenjang',
             ])
                 ->join('barangs', 'barangs.id', '=', 'transaks.barang_id')
                 ->join('ruangans', 'ruangans.id', '=', 'transaks.ruangan_id')
+                ->join('jenjangs', 'jenjangs.id', '=', 'ruangans.jenjang_id')
+                ->with('ruangan.jenjang')
                 ->get();
 
             return DataTables::of($transaks)
+                ->addColumn('nama_ruangan', function ($transak) {
+                    if ($transak->jenjang_id && $transak->nama_jenjang) {
+                        return $transak->nama_jenjang . ' - ' . $transak->nama_ruangan;
+                    } else {
+                        return 'Data Ruangan Tidak Tersedia';
+                    }
+                })
                 ->addColumn('action', function ($row) {
                     return view('transaks.include.action', ['transak' => $row]);
                 })
@@ -92,7 +106,12 @@ class TransakController extends Controller
      */
     public function create(): \Illuminate\Contracts\View\View
     {
-        return view('transaks.create');
+        // Assuming $transak needs to be initialized here
+        $transak = new Transak(); // Replace with your actual model and initialization logic
+
+        $data = Ruangan::with('jenjang')->get();
+
+        return view('transaks.create', compact('data', 'transak'));
     }
 
     /**
@@ -110,7 +129,7 @@ class TransakController extends Controller
             $barang = \App\Models\Barang::find($request->barang_id);
             $barang->jml_barang += $request->jml_mutasi;
             $barang->save();
-        } 
+        }
         // elseif ($request->jenis_mutasi == 'Barang Keluar') {
         //     $barang = \App\Models\Barang::find($request->barang_id);
         //     $barang->jml_barang -= $request->jml_mutasi;
@@ -137,7 +156,9 @@ class TransakController extends Controller
     {
         $transak->load('barang:id,nama_barang', 'ruangan:id,nama_ruangan');
 
-        return view('transaks.edit', compact('transak'));
+        $data = Ruangan::with('jenjang')->get();
+
+        return view('transaks.edit', compact('transak', 'data'));
     }
 
     /**
@@ -158,7 +179,7 @@ class TransakController extends Controller
         // Revert the changes made by the original transaction
         if ($originalJenisMutasi == 'Barang Masuk') {
             $barang->jml_barang -= $originalJmlMutasi;
-        } 
+        }
         // elseif ($originalJenisMutasi == 'Barang Keluar') {
         //     $barang->jml_barang += $originalJmlMutasi;
         // }
@@ -166,7 +187,7 @@ class TransakController extends Controller
         // Apply the changes based on the updated transaction
         if ($request->jenis_mutasi == 'Barang Masuk') {
             $barang->jml_barang += $request->jml_mutasi;
-        } 
+        }
         // elseif ($request->jenis_mutasi == 'Barang Keluar') {
         //     $barang->jml_barang -= $request->jml_mutasi;
         // }

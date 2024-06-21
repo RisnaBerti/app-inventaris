@@ -66,6 +66,12 @@
                                         <td class="fw-bold">{{ __('Jml Barang') }}</td>
                                         <td>{{ $barang->jml_barang }}</td>
                                     </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Foto') }}</td>
+                                        <td>
+                                            <img src="{{ asset('storage/' . $barang->foto_barang) }}" alt="{{ $barang->nama_barang }}"
+                                                class="img-fluid" style="max-width: 200px" />
+                                        </td>
                                    
                                 </table>
                             </div>

@@ -43,3 +43,4 @@ Route::resource('pelaporans', App\Http\Controllers\PelaporanController::class)->
 Route::get('laporans', [App\Http\Controllers\LaporanController::class, 'index'])->name('laporans.index')->middleware('auth');
 Route::get('laporans/print', [App\Http\Controllers\LaporanController::class, 'print'])->name('laporans.print')->middleware('auth');
 Route::resource('pegawais', App\Http\Controllers\PegawaiController::class)->middleware('auth');
+Route::resource('jenjangs', App\Http\Controllers\JenjangController::class)->middleware('auth');

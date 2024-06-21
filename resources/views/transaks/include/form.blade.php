@@ -18,25 +18,62 @@
             @enderror
         </div>
     </div>
+
     <div class="col-md-6">
         <div class="form-group">
             <label for="ruangan-id">{{ __('Ruangan') }}</label>
-            <select class="form-select @error('ruangan_id') is-invalid @enderror" name="ruangan_id" id="ruangan-id" class="form-control" required>
+            <select class="form-select @error('ruangan_id') is-invalid @enderror" name="ruangan_id" id="ruangan-id"
+                    class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select ruangan') }} --</option>
-                
-                        @foreach ($ruangans as $ruangan)
-                            <option value="{{ $ruangan->id }}" {{ isset($transak) && $transak->ruangan_id == $ruangan->id ? 'selected' : (old('ruangan_id') == $ruangan->id ? 'selected' : '') }}>
-                                {{ $ruangan->nama_ruangan }}
-                            </option>
-                        @endforeach
+                @foreach ($data as $ruangan)
+                    <option value="{{ $ruangan->id }}" {{ old('ruangan_id', $transak->ruangan_id ?? '') == $ruangan->id ? 'selected' : '' }}>
+                        {{ $ruangan->jenjang->nama_jenjang }} - {{ $ruangan->nama_ruangan }}
+                    </option>
+                @endforeach
             </select>
             @error('ruangan_id')
+            <span class="text-danger">
+                {{ $message }}
+            </span>
+            @enderror
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="no-inventaris">{{ __('No Inventaris') }}</label>
+            <input type="text" name="no_inventaris" id="no-inventaris" class="form-control @error('no_inventaris') is-invalid @enderror" value="{{ isset($transak) ? $transak->no_inventaris : old('no_inventaris') }}" placeholder="{{ __('No Inventaris') }}" required />
+            @error('no_inventaris')
                 <span class="text-danger">
                     {{ $message }}
                 </span>
             @enderror
         </div>
     </div>
+    
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="jenis-pengadaan">{{ __('Jenis Pengadaan') }}</label>
+            <select class="form-select @error('jenis_pengadaan') is-invalid @enderror" name="jenis_pengadaan" id="jenis-pengadaan" class="form-control" required>
+                <option value="" selected disabled>-- {{ __('Select jenis pengadaan') }} --</option>
+                <option value="PEMBELIAN" {{ isset($transak) && $transak->jenis_pengadaan == 'PEMBELIAN' ? 'selected' : (old('jenis_pengadaan') == 'PEMBELIAN' ? 'selected' : '') }}>
+                    PEMBELIAN
+                </option>
+                <option value="HIBAH" {{ isset($transak) && $transak->jenis_pengadaan == 'HIBAH' ? 'selected' : (old('jenis_pengadaan') == 'HIBAH' ? 'selected' : '') }}>
+                    HIBAH
+                </option>
+                <option value="BANTUAN" {{ isset($transak) && $transak->jenis_pengadaan == 'BANTUAN' ? 'selected' : (old('jenis_pengadaan') == 'BANTUAN' ? 'selected' : '') }}>
+                    BANTUAN
+                </option>
+            </select>
+            @error('jenis_pengadaan')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div>
+
     <div class="col-md-6">
         <div class="form-group">
             <label for="tgl-mutasi">{{ __('Tgl Mutasi') }}</label>
@@ -48,6 +85,7 @@
             @enderror
         </div>
     </div>
+    
 	<div class="col-md-6">
 	<p>Jenis Mutasi</p>
         <div class="form-check mb-2">
@@ -117,6 +155,21 @@
             @enderror
         </div>
     </div>
+
+    {{-- qrcode, otomatis generate qrcode --}}
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="qrcode">{{ __('QR Code') }}</label>
+            <input type="text" name="qrcode" id="qrcode" class="form-control @error('qrcode') is-invalid @enderror" value="{{ isset($transak) ? $transak->qrcode : old('qrcode') }}" placeholder="{{ __('QR Code') }}" required />
+            @error('qrcode')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div>
+
+
     {{-- <div class="col-md-6">
         <div class="form-group">
             <label for="jml-baik">{{ __('Jml Baik') }}</label>

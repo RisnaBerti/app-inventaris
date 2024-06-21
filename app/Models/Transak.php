@@ -21,15 +21,38 @@ class Transak extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['barang_id', 'ruangan_id', 'tgl_mutasi', 'jenis_mutasi', 'tahun_akademik', 'periode', 'jml_mutasi', 'tempat_asal'];
+    protected $fillable = [
+        'barang_id', 
+        'ruangan_id', 
+        'tgl_mutasi', 
+        'jenis_mutasi', 
+        'tahun_akademik', 
+        'periode', 
+        'jml_mutasi', 
+        'tempat_asal',
+        'no_inventaris',
+        'jenis_pengadaan',
+        'qrcode',
+    ];
 
     /**
      * The attributes that should be cast.
      *
      * @var string[]
      */
-    protected $casts = ['tgl_mutasi' => 'date:d/m/Y', 'tahun_akademik' => 'string', 'periode' => 'date:m/Y', 'jml_mutasi' => 'integer', 'tempat_asal' => 'string', 'created_at' => 'datetime:d/m/Y H:i', 'updated_at' => 'datetime:d/m/Y H:i'];
-    // 'jml_baik' => 'integer', 'jml_kurang_baik' => 'integer', 'jml_rusak_berat' => 'integer',
+    protected $casts = [
+        'tgl_mutasi' => 'date:d/m/Y', 
+        'tahun_akademik' => 'string', 
+        'periode' => 'date:m/Y', 
+        'jml_mutasi' => 'integer', 
+        'tempat_asal' => 'string', 
+        'no_inventaris' => 'string',
+        'qrcode' => 'string',
+        'jenis_pengadaan' => 'string',
+        'created_at' => 'datetime:d/m/Y H:i', 
+        'updated_at' => 'datetime:d/m/Y H:i'
+    ];
+
 
 	public function barang()
 	{

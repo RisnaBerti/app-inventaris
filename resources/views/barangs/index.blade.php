@@ -48,6 +48,7 @@
                                             <th>{{ __('Tahun Pembuatan Pembelian') }}</th>
                                             <th>{{ __('Satuan') }}</th>
                                             <th>{{ __('Jml Barang') }}</th>
+                                            <th>{{ __('Foto') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -115,6 +116,31 @@
                 {
                     data: 'jml_barang',
                     name: 'jml_barang',
+                },
+                {
+                    data: 'foto_barang',
+                    name: 'foto_barang',
+                    orderable: false,
+                    searchable: false,
+                    render: function(data, type, full, meta) {
+                        if (data) {
+                            // Cek jika data adalah tautan PDF
+                            if (data.endsWith('.pdf')) {
+                                var fileName = data.split('/').pop();
+                                return `<a href="${data}" target="_blank">${fileName}</a>`;
+                            } else {
+                                // Jika bukan PDF, maka asumsikan data adalah URL gambar
+                                return `
+                                        <img src="${data}" width="200" height="150" style="object-fit: cover alt="Dokumen Perencanaan"  >
+                                   `;
+                            }
+                        } else {
+                            // Tampilkan placeholder jika data dokumen kosong
+                            return `
+                                    <img src="https://via.placeholder.com/350?text=No+Image+Available" alt="No Image Available">
+                               `;
+                        }
+                    }
                 },
                 {
                     data: 'action',

@@ -25,38 +25,6 @@ class PelaporanController extends Controller
         if (request()->ajax()) {
             //     $pelaporans = Pelaporan::with('barang:id,nama_barang,kode_barang,merk_model,ukuran,bahan,tahun_pembuatan_pembelian', 'ruangan:id,nama_ruangan', 'transak:id,tahun_akademik,jml_mutasi');
 
-            //     return DataTables::of($pelaporans)
-            //         ->addColumn('nama_barang', function ($row) {
-            //             return $row->barang ? $row->barang->nama_barang : '';
-            //         })
-            //         ->addColumn('kode_barang', function ($row) {
-            //             return $row->barang ? $row->barang->kode_barang : '';
-            //         })
-            //         ->addColumn('merk_model', function ($row) {
-            //             return $row->barang ? $row->barang->merk_model : '';
-            //         })
-            //         ->addColumn('ukuran', function ($row) {
-            //             return $row->barang ? $row->barang->ukuran : '';
-            //         })
-            //         ->addColumn('bahan', function ($row) {
-            //             return $row->barang ? $row->barang->bahan : '';
-            //         })
-            //         ->addColumn('tahun_pembuatan_pembelian', function ($row) {
-            //             return $row->barang ? $row->barang->tahun_pembuatan_pembelian : '';
-            //         })
-            //         ->addColumn('ruangan', function ($row) {
-            //             return $row->ruangan ? $row->ruangan->nama_ruangan : '';
-            //         })
-            //         ->addColumn('transak', function ($row) {
-            //             return $row->transak ? $row->transak->tahun_akademik : '';
-            //         })
-            //         ->addColumn('jml_mutasi', function ($row) {
-            //             return $row->transak ? $row->transak->jml_mutasi : '';
-            //         })
-            //         ->addColumn('action', 'pelaporans.include.action')
-            //         ->addIndexColumn()
-            //         ->toJson();
-
             $pelaporans = Pelaporan::with(['transak' => function ($query) {
                 $query->where('jenis_mutasi', 'Barang Keluar')
                     ->with('barang:id,nama_barang,kode_barang,merk_model,ukuran,bahan,tahun_pembuatan_pembelian')

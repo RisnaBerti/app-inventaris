@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jenjang;
 use App\Models\Ruangan;
-use App\Http\Requests\Ruangans\{StoreRuanganRequest, UpdateRuanganRequest};
 use Yajra\DataTables\Facades\DataTables;
+use App\Http\Requests\Ruangans\{StoreRuanganRequest, UpdateRuanganRequest};
 
 class RuanganController extends Controller
 {
@@ -22,7 +23,15 @@ class RuanganController extends Controller
     public function index(): \Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse
     {
         if (request()->ajax()) {
-            $ruangans = Ruangan::query();
+            // $ruangans = Ruangan::query();
+            $ruangans = Ruangan::select([
+                'ruangans.id',
+                'ruangans.nama_ruangan',
+                'jenjangs.nama_jenjang',
+            ])
+            ->join('jenjangs', 'jenjangs.id', '=', 'ruangans.jenjang_id')
+            ->get();
+
 
             return DataTables::of($ruangans)
                 ->addColumn('action', 'ruangans.include.action')
@@ -38,7 +47,10 @@ class RuanganController extends Controller
      */
     public function create(): \Illuminate\Contracts\View\View
     {
-        return view('ruangans.create');
+        // return view('ruangans.edit', compact('ruangan'));
+        $jenjangs = Jenjang::all(); 
+
+        return view('ruangans.create', compact('jenjangs'));
     }
 
     /**
@@ -46,6 +58,7 @@ class RuanganController extends Controller
      */
     public function store(StoreRuanganRequest $request): \Illuminate\Http\RedirectResponse
     {
+
         
         Ruangan::create($request->validated());
 
@@ -57,6 +70,8 @@ class RuanganController extends Controller
      */
     public function show(Ruangan $ruangan): \Illuminate\Contracts\View\View
     {
+        $ruangan->load('jenjang:id,nama_jenjang');
+
         return view('ruangans.show', compact('ruangan'));
     }
 
@@ -65,7 +80,12 @@ class RuanganController extends Controller
      */
     public function edit(Ruangan $ruangan): \Illuminate\Contracts\View\View
     {
-        return view('ruangans.edit', compact('ruangan'));
+        $ruangan->load('jenjang:id,nama_jenjang');
+
+        // return view('ruangans.edit', compact('ruangan'));
+        $jenjangs = Jenjang::all(); // Adjust this query based on your actual Jenjang model and requirements
+
+        return view('ruangans.edit', compact('ruangan', 'jenjangs'));
     }
 
     /**

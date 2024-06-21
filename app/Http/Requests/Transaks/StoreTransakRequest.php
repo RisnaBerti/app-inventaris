@@ -28,6 +28,9 @@ class StoreTransakRequest extends FormRequest
 			'periode' => 'required',
 			'jml_mutasi' => 'required|numeric',
 			'tempat_asal' => 'required|string|max:50',
+            'no_inventaris' => 'required|string|max:50',
+            'jenis_pengadaan' => 'required|string|max:50',
+            'qrcode' => 'required|string|max:50',
         ];
     }
 }

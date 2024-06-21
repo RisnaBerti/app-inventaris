@@ -42,12 +42,15 @@
                                             <th>{{ __('No') }}</th>
                                             <th>{{ __('Barang') }}</th>
                                             <th>{{ __('Ruangan') }}</th>
+                                            <th>{{ __('No Inventaris') }}</th>
+                                            <th>{{ __('Jenis Pengadaan') }}</th>
                                             <th>{{ __('Tgl Mutasi') }}</th>
                                             <th>{{ __('Jenis Mutasi') }}</th>
                                             <th>{{ __('Tahun Akademik') }}</th>
                                             <th>{{ __('Periode') }}</th>
                                             <th>{{ __('Total Barang') }}</th>
                                             <th>{{ __('Tempat Asal') }}</th>
+                                            <th>{{ __('QR Code') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -93,6 +96,14 @@
                     name: 'nama_ruangan'
                 },
                 {
+                    data: 'no_inventaris',
+                    name: 'no_inventaris'
+                },
+                {
+                    data: 'jenis_pengadaan',
+                    name: 'jenis_pengadaan'
+                },
+                {
                     data: 'tgl_mutasi',
                     name: 'tgl_mutasi',
                 },
@@ -127,6 +138,10 @@
                 {
                     data: 'tempat_asal',
                     name: 'tempat_asal',
+                },
+                {
+                    data: 'qrcode',
+                    name: 'qrcode',
                 },
                 {
                     data: 'action',

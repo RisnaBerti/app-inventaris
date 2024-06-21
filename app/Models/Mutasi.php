@@ -21,7 +21,15 @@ class Mutasi extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['barang_id', 'ruangan_id', 'tgl_mutasi', 'jenis_mutasi', 'tahun_akademik', 'jml_mutasi', 'tempat_asal'];
+    protected $fillable = [
+        'barang_id', 
+        'ruangan_id', 
+        'tgl_mutasi', 
+        'jenis_mutasi', 
+        'tahun_akademik', 
+        'jml_mutasi', 
+        'tempat_asal'
+    ];
 
     /**
      * The attributes that should be cast.

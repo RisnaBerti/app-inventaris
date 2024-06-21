@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Ruangan extends Model
+class Jenjang extends Model
 {
     use HasFactory;
 
@@ -14,31 +14,25 @@ class Ruangan extends Model
      *
      * @var string
      */
-    protected $table = 'ruangans';
+    protected $table = 'jenjangs';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
-    protected $fillable = ['nama_ruangan',
-    'jenjang_id'];
+    protected $fillable = ['kode_jenjang', 'nama_jenjang'];
 
     /**
      * The attributes that should be cast.
      *
      * @var string[]
      */
-    protected $casts = ['nama_ruangan' => 'string', 'created_at' => 'datetime:d/m/Y H:i', 'updated_at' => 'datetime:d/m/Y H:i'];
+    protected $casts = ['kode_jenjang' => 'string', 'nama_jenjang' => 'string', 'created_at' => 'datetime:d/m/Y H:i', 'updated_at' => 'datetime:d/m/Y H:i'];
     
 
-    public function transaks()
+    public function ruangan()
     {
-        return $this->hasMany(Transak::class);
-    }
-
-    public function jenjang()
-    {
-        return $this->belongsTo(Jenjang::class);
+        return $this->hasMany(Ruangan::class);
     }
 }

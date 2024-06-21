@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@section('title', __('Edit Barangs'))
+@section('title', __('Create Jenjang'))
 
 @section('content')
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-8 order-md-1 order-last">
-                    <h3>{{ __('Barang') }}</h3>
+                    <h3>{{ __('Jenjang') }}</h3>
                     <p class="text-subtitle text-muted">
-                        {{ __('Edit data barang.') }}
+                        {{ __('Tambah Data jenjang.') }}
                     </p>
                 </div>
 
@@ -18,10 +18,10 @@
                         <a href="/">{{ __('Dashboard') }}</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="{{ route('barangs.index') }}">{{ __('Barang') }}</a>
+                        <a href="{{ route('jenjangs.index') }}">{{ __('Jenjang') }}</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        {{ __('Edit') }}
+                        {{ __('Tambah') }}
                     </li>
                 </x-breadcrumb>
             </div>
@@ -32,15 +32,15 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{ route('barangs.update', $barang->id) }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('jenjangs.store') }}" method="POST">
                                 @csrf
-                                @method('PUT')
+                                @method('POST')
 
-                                @include('barangs.include.form')
+                                @include('jenjangs.include.form')
 
-                                <a href="{{ route('barangs.index') }}" class="btn btn-secondary">{{ __('Back') }}</a>
+                                <a href="{{ route('jenjangs.index') }}" class="btn btn-secondary">{{ __('Back') }}</a>
 
-                                <button type="submit" class="btn btn-primary">{{ __('Update') }}</button>
+                                <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
                             </form>
                         </div>
                     </div>
