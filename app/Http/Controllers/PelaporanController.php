@@ -23,21 +23,32 @@ class PelaporanController extends Controller
     public function index(): \Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse
     {
         if (request()->ajax()) {
-            //     $pelaporans = Pelaporan::with('barang:id,nama_barang,kode_barang,merk_model,ukuran,bahan,tahun_pembuatan_pembelian', 'ruangan:id,nama_ruangan', 'transak:id,tahun_akademik,jml_mutasi');
-
             $pelaporans = Pelaporan::with(['transak' => function ($query) {
                 $query->where('jenis_mutasi', 'Barang Keluar')
                     ->with('barang:id,nama_barang,kode_barang,merk_model,ukuran,bahan,tahun_pembuatan_pembelian')
-                    ->with('ruangan:id,nama_ruangan');
+                    ->with('ruangan:id,nama_ruangan,jenjang_id')
+                    ->with('ruangan.jenjang:id,nama_jenjang'); // Ensure to load jenjang
             }])
                 ->join('transaks', 'pelaporans.transak_id', '=', 'transaks.id')
                 ->join('barangs', 'transaks.barang_id', '=', 'barangs.id')
                 ->join('ruangans', 'transaks.ruangan_id', '=', 'ruangans.id')
-                ->select('pelaporans.*', 'barangs.nama_barang', 'barangs.kode_barang', 'barangs.merk_model', 'barangs.ukuran', 'barangs.bahan', 'barangs.tahun_pembuatan_pembelian', 'ruangans.nama_ruangan', 'transaks.tahun_akademik', 'transaks.jml_mutasi');
-
+                ->join('jenjangs', 'ruangans.jenjang_id', '=', 'jenjangs.id') // Correct join
+                ->select('pelaporans.*', 
+                    'barangs.nama_barang', 
+                    'barangs.kode_barang', 
+                    'barangs.merk_model', 
+                    'barangs.ukuran', 
+                    'barangs.bahan', 
+                    'barangs.tahun_pembuatan_pembelian', 
+                    'ruangans.nama_ruangan', 
+                    'jenjangs.nama_jenjang', // Add the field to select statement
+                    'transaks.tahun_akademik', 
+                    'transaks.jml_mutasi'
+                );
+    
             return DataTables::of($pelaporans)
                 ->addColumn('nama_barang', function ($row) {
-                    return $row->nama_barang ?? '';
+                    return $row->nama_jenjang . ' - ' . $row->nama_ruangan;
                 })
                 ->addColumn('kode_barang', function ($row) {
                     return $row->kode_barang ?? '';
@@ -67,22 +78,20 @@ class PelaporanController extends Controller
                 ->addIndexColumn()
                 ->toJson();
         }
-
+    
         return view('pelaporans.index');
     }
+    
 
     /**
      * Show the form for creating a new resource.
      */
     public function create(): \Illuminate\Contracts\View\View
     {
-        $data = Transak::with(['barang', 'ruangan'])
-            ->get();
-
+        $data = Transak::with(['barang', 'ruangan.jenjang'])
+        ->get();
 
         return view('pelaporans.create', ['data' => $data, 'pelaporan' => null]);
-
-        // return view('pelaporans.create', compact('data'));
     }
 
     /**
@@ -108,7 +117,15 @@ class PelaporanController extends Controller
      */
     public function show(Pelaporan $pelaporan): \Illuminate\Contracts\View\View
     {
-        $pelaporan->load('barang:id,nama_barang', 'ruangan:id,nama_ruangan', 'transak:id,tahun_akademik');
+        // $pelaporan->load('barang:id,nama_barang', 'ruangan:id,nama_ruangan', 'transak:id,tahun_akademik');
+        $pelaporan->load([
+            'barang:id,nama_barang', 
+            'ruangan:id,nama_ruangan,jenjang_id', 
+            'ruangan.jenjang:id,nama_jenjang', 
+            'transak:id,tahun_akademik'
+        ]);
+
+        dd($pelaporan->toArray());
 
         return view('pelaporans.show', compact('pelaporan'));
     }

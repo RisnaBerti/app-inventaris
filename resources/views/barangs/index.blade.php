@@ -40,6 +40,7 @@
                                     <thead>
                                         <tr>
                                             <th>{{ __('No') }}</th>
+                                            <th>{{ __('Kategori Barang') }}</th>
                                             <th>{{ __('Nama Barang') }}</th>
                                             <th>{{ __('Kode Barang') }}</th>
                                             <th>{{ __('Merk Model') }}</th>
@@ -84,6 +85,10 @@
                     name: 'DT_RowIndex',
                     orderable: false,
                     searchable: false
+                },
+                {
+                    data: 'kategori_barang',
+                    name: 'kategori_barang',
                 },
                 {
                     data: 'nama_barang',
@@ -131,7 +136,7 @@
                             } else {
                                 // Jika bukan PDF, maka asumsikan data adalah URL gambar
                                 return `
-                                        <img src="${data}" width="200" height="150" style="object-fit: cover alt="Dokumen Perencanaan"  >
+                                        <img src="${data}" class="img-thumbnail" width="200" height="150" style="object-fit: cover alt="Dokumen Perencanaan"  >
                                    `;
                             }
                         } else {

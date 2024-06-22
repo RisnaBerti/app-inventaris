@@ -190,7 +190,7 @@ return [
 
         ['group' => 'barangs', 'access' => ['barang view', 'barang create', 'barang edit', 'barang delete']],
         ['group' => 'ruangans', 'access' => ['ruangan view', 'ruangan create', 'ruangan edit', 'ruangan delete']],
-        ['group' => 'transaks', 'access' => ['transak view', 'transak create', 'transak edit', 'transak delete']],
+        ['group' => 'transaks', 'access' => ['transak view', 'transak create', 'transak edit', 'transak delete', 'transak label']],
         ['group' => 'pelaporans', 'access' => ['pelaporan view', 'pelaporan create', 'pelaporan edit', 'pelaporan delete']],
         ['group' => 'laporans', 'access' => ['laporan view', 'laporan print']],
         ['group' => 'pegawais', 'access' => ['pegawai view', 'pegawai create', 'pegawai edit', 'pegawai delete']], 

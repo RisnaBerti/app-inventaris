@@ -37,7 +37,7 @@ class RoleAndPermissionSeeder extends Seeder
         $roleAdmin = Role::firstOrCreate(['name' => 'Admin']);
 
         // Define the permissions for the laporans group
-        $laporansPermissions = ['dashboard view'];
+        $laporansPermissions = ['transak label'];
 
         // Create permissions for the laporans group if they don't already exist
         foreach ($laporansPermissions as $permissionName) {

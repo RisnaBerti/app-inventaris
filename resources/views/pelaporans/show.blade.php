@@ -34,14 +34,18 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-hover table-striped">
-                                    {{-- <tr>
+                                    <tr>
                                         <td class="fw-bold">{{ __('Barang') }}</td>
-                                        <td>{{ $pelaporan->barang ? $pelaporan->barang->nama_barang : '' }}</td>
+                                        <td>{{ $pelaporan->barang->nama_barang }}</td>
                                     </tr>
                                     <tr>
                                         <td class="fw-bold">{{ __('Ruangan') }}</td>
-                                        <td>{{ $pelaporan->ruangan ? $pelaporan->ruangan->nama_ruangan : '' }}</td>
-                                    </tr> --}}
+                                        <td> {{$pelaporan->ruangan->jenjang->nama_jenjang }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Ruangan') }}</td>
+                                        <td> {{ $pelaporan->ruangan->nama_ruangan }}</td>
+                                    </tr>
                                     <tr>
                                         <td class="fw-bold">{{ __('Transak') }}</td>
                                         <td>{{ $pelaporan->transak ? $pelaporan->transak->barang_id : '' }}</td>

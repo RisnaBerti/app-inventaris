@@ -51,6 +51,7 @@
                                             <th>{{ __('Total Barang') }}</th>
                                             <th>{{ __('Tempat Asal') }}</th>
                                             <th>{{ __('QR Code') }}</th>
+                                            <th>{{ __('Generate') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -142,6 +143,34 @@
                 {
                     data: 'qrcode',
                     name: 'qrcode',
+                    orderable: false,
+                    searchable: false,
+                    render: function(data, type, full, meta) {
+                        if (data) {
+                                // Jika bukan PDF, maka asumsikan data adalah URL gambar
+                                return `
+                                        <img src="${data}" class="img-thumbnail" width="200" height="150" style="object-fit: cover alt="Dokumen Perencanaan"  >
+                                   `;
+                        } else {
+                            // Tampilkan placeholder jika data dokumen kosong
+                            return `
+                                    <img src="https://via.placeholder.com/350?text=No+Image+Available" alt="No Image Available">
+                               `;
+                        }
+                    }
+                },
+                {
+                    data: 'id_transaksi', // Assuming 'id' is the identifier for the row
+                    name: 'generate',
+                    orderable: false,
+                    searchable: false,
+                    render: function(data, type, full, meta) {
+                        // Render button to generate label
+                        return `<a href="{{ route('transak.label', ':id') }}" class="btn btn-primary btn-sm"  target="_blank">
+                                    <i class="fas fa-print"></i>
+                                    Print Label
+                                </a>`.replace(':id', data);
+                    }
                 },
                 {
                     data: 'action',

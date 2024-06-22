@@ -44,3 +44,5 @@ Route::get('laporans', [App\Http\Controllers\LaporanController::class, 'index'])
 Route::get('laporans/print', [App\Http\Controllers\LaporanController::class, 'print'])->name('laporans.print')->middleware('auth');
 Route::resource('pegawais', App\Http\Controllers\PegawaiController::class)->middleware('auth');
 Route::resource('jenjangs', App\Http\Controllers\JenjangController::class)->middleware('auth');
+
+Route::get('transak/label/{id}', [App\Http\Controllers\TransakController::class, 'printLabel'])->name('transak.label');

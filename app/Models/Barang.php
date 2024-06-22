@@ -22,6 +22,7 @@ class Barang extends Model
      * @var string[]
      */
     protected $fillable = [
+        'kategori_barang',
         'nama_barang', 
         'kode_barang', 
         'merk_model', 
@@ -39,6 +40,7 @@ class Barang extends Model
      * @var string[]
      */
     protected $casts = [
+        'kategori_barang' => 'string',
         'nama_barang' => 'string', 
         'kode_barang' => 'string', 
         'merk_model' => 'string', 

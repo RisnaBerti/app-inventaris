@@ -1,5 +1,5 @@
 <div class="row mb-2">
-    <div class="col-md-12">
+    {{-- <div class="col-md-12">
         <div class="form-group">
             <label for="transak-id">{{ __('Transak') }}</label>
             <select class="form-select @error('transak_id') is-invalid @enderror" name="transak_id" id="transak-id"
@@ -7,7 +7,7 @@
                 <option value="" selected disabled>-- {{ __('Select transak') }} --</option>
                 @foreach ($data as $transak)
                     <option value="{{ $transak->id }}" {{ old('transak_id', $pelaporan->transak_id ?? '') == $transak->id ? 'selected' : '' }}>
-                        {{ $transak->barang->nama_barang }} - {{ $transak->barang->kode_barang }} - {{ $transak->ruangan->nama_ruangan }} - {{ $transak->tahun_akademik }} - {{ $transak->jml_mutasi }} - {{ $transak->jenis_mutasi }} - {{ date('F/Y', strtotime($transak->periode)) }}
+                        {{ $transak->ruangan->jenjang->nama_jenjang }} - {{ $transak->barang->nama_barang }} - {{ $transak->barang->kode_barang }} - {{ $transak->ruangan->nama_ruangan }} - {{ $transak->tahun_akademik }} - {{ $transak->jml_mutasi }} - {{ $transak->jenis_mutasi }} - {{ date('F/Y', strtotime($transak->periode)) }}
                     </option>
                 @endforeach
             </select>
@@ -17,7 +17,38 @@
             </span>
             @enderror
         </div>
+    </div> --}}
+
+    <div class="row mb-2">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="transak-id">{{ __('Transak') }}</label>
+                <select class="form-select @error('transak_id') is-invalid @enderror" name="transak_id" id="transak-id" required>
+                    <option value="" selected disabled>-- {{ __('Select transak') }} --</option>
+                    @foreach ($data as $transak)
+                        <option value="{{ $transak->id }}" {{ old('transak_id', $pelaporan->transak_id ?? '') == $transak->id ? 'selected' : '' }}>                            
+                            {{ $transak->barang->nama_barang }} - 
+                            {{ $transak->barang->kode_barang }} - 
+                            {{ $transak->ruangan->jenjang->nama_jenjang ?? 'N/A' }} - 
+                            {{ $transak->ruangan->nama_ruangan }} - 
+                            {{ $transak->tahun_akademik }} - 
+                            {{ $transak->jml_mutasi }} - 
+                            {{ $transak->jenis_mutasi }} - 
+                            {{ date('F/Y', strtotime($transak->periode)) }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('transak_id')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+                @enderror
+            </div>
+        </div>
     </div>
+    
+    
+    
     
     <div class="col-md-6">
         <div class="form-group">

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transak;
 use App\Models\Barang;
 use App\Models\Ruangan;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use App\Models\Transak;
+use Carbon\Carbon;
+use Milon\Barcode\DNS2D;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Transaks\{StoreTransakRequest, UpdateTransakRequest};
 
@@ -18,6 +18,7 @@ class TransakController extends Controller
         $this->middleware('permission:transak create')->only('create', 'store');
         $this->middleware('permission:transak edit')->only('edit', 'update');
         $this->middleware('permission:transak delete')->only('destroy');
+        $this->middleware('permission:transak label')->only('printLabel');
     }
 
     /**
@@ -88,6 +89,13 @@ class TransakController extends Controller
                         return 'Data Ruangan Tidak Tersedia';
                     }
                 })
+
+                ->addColumn('qrcode', function ($row) {
+                    if ($row->qrcode == null) {
+                        return 'belum ada gambar';
+                    }
+                    return asset('storage/uploads/qrcodes/' . $row->qrcode);
+                })
                 ->addColumn('action', function ($row) {
                     return view('transaks.include.action', ['transak' => $row]);
                 })
@@ -107,11 +115,11 @@ class TransakController extends Controller
     public function create(): \Illuminate\Contracts\View\View
     {
         // Assuming $transak needs to be initialized here
-        $transak = new Transak(); // Replace with your actual model and initialization logic
-
+        $transak = new Transak();
+        $barangs = Barang::all();
         $data = Ruangan::with('jenjang')->get();
 
-        return view('transaks.create', compact('data', 'transak'));
+        return view('transaks.create', compact('data', 'transak', 'barangs'));
     }
 
     /**
@@ -119,14 +127,39 @@ class TransakController extends Controller
      */
     public function store(StoreTransakRequest $request): \Illuminate\Http\RedirectResponse
     {
+        // Validasi dan ambil atribut dari request yang sudah divalidasi
         $attr = $request->validated();
-        $attr['periode'] = $request->periode ? \Carbon\Carbon::createFromFormat('Y-m', $request->periode)->toDateTimeString() : null;
 
-        Transak::create($attr);
+        // Konversi periode jika ada
+        $attr['periode'] = $request->periode ? Carbon::createFromFormat('Y-m', $request->periode)->toDateTimeString() : null;
 
-        //jika ada data transak jenis_mutasi = Barang Masuk Maka jml_barang dari tabel barang bertambah
+        // Buat transaksi baru
+        $transak = Transak::create($attr);
+
+        // Update kolom no_inventaris
+        $ruangan = Ruangan::with('jenjang')->find($request->ruangan_id);
+        $barang = Barang::find($request->barang_id);
+        $no_inventaris = $ruangan->jenjang->kode_jenjang . '.' . $barang->kategori_barang . '.' . date('m') . '.' . date('Y');
+
+        // Generate data untuk QR Code
+        $data = $barang->nama_barang . ' ' . $barang->kode_barang . ' ' . $request->periode . ' ' . $ruangan->nama_ruangan . ' ' . $ruangan->jenjang->nama_jenjang;
+
+        // Generate QR Code menggunakan Milon Barcode (DNS2D)
+        $qrCode = DNS2D::getBarcodePNGPath($data, 'QRCODE');
+
+        // Simpan QR Code sebagai file PNG
+        $qrcodeName = $no_inventaris . '.png';
+        $qrcodePath = public_path('storage/uploads/qrcodes/' . $qrcodeName);
+        file_put_contents($qrcodePath, file_get_contents($qrCode));
+
+        // Update no_inventaris dan qrcode pada transaksi yang baru dibuat
+        $transak->update([
+            'no_inventaris' => $no_inventaris,
+            'qrcode' => $qrcodeName,
+        ]);
+
+        // Jika jenis_mutasi adalah 'Barang Masuk', tambahkan jumlah barang
         if ($request->jenis_mutasi == 'Barang Masuk') {
-            $barang = \App\Models\Barang::find($request->barang_id);
             $barang->jml_barang += $request->jml_mutasi;
             $barang->save();
         }
@@ -172,7 +205,27 @@ class TransakController extends Controller
         $originalJmlMutasi = $transak->jml_mutasi;
         $originalJenisMutasi = $transak->jenis_mutasi;
 
+        // Hapus QR Code lama jika ada
+        if ($transak->qrcode) {
+            $qrcodePath = public_path('storage/uploads/qrcodes/' . $transak->qrcode);
+            if (file_exists($qrcodePath)) {
+                unlink($qrcodePath); // Hapus file QR Code lama dari sistem file
+            }
+        }
+
         $transak->update($attr);
+
+        // Update no_inventaris dan qrcode pada transaksi yang baru dibuat
+        $ruangan = \App\Models\Ruangan::with('jenjang')->find($request->ruangan_id);
+        $transak->no_inventaris = $ruangan->jenjang->kode_jenjang . '.' . $transak->barang->kategori_barang . '.' . date('m') . '.' . date('Y');
+
+        $data = $transak->barang->nama_barang . ' ' . $transak->barang->kode_barang . ' ' . $request->periode . ' ' . $ruangan->nama_ruangan . ' ' . $ruangan->jenjang->nama_jenjang;
+        $qrCode = DNS2D::getBarcodePNGPath($data, 'QRCODE');
+        $qrcodeName = $transak->no_inventaris . '.png';
+        $qrcodePath = public_path('storage/uploads/qrcodes/' . $qrcodeName);
+        file_put_contents($qrcodePath, file_get_contents($qrCode));
+        $transak->qrcode = $qrcodeName;
+        $transak->save();
 
         $barang = \App\Models\Barang::find($request->barang_id);
 
@@ -193,6 +246,9 @@ class TransakController extends Controller
         // }
 
         $barang->save();
+        // $transak->barang()->update(['jml_barang' => $barang->jml
+        //     _barang]);
+        // $transak->save();
 
         return to_route('transaks.index')->with('success', __('The transak was updated successfully.'));
     }
@@ -226,5 +282,46 @@ class TransakController extends Controller
         } catch (\Throwable $th) {
             return to_route('transaks.index')->with('error', __("The transak can't be deleted because it's related to another table."));
         }
+    }
+
+    //fungsi untuk membuat label inventaris dari data no_inventaris dan qrcode 
+
+    // $barang = \App\Models\Barang::find($transak->barang_id);
+    // $ruangan = \App\Models\Ruangan::find($transak->ruangan_id);
+    // $label = [
+    //     'no_inventaris' => $transak->no_inventaris,
+    //     'nama_barang' => $barang->nama_barang,
+    //     'kode_barang' => $barang->kode_barang,
+    //     'periode' => $transak->periode,
+    //     'nama_ruangan' => $ruangan->nama_ruangan,
+    //     'nama_jenjang' => $ruangan->jenjang->nama_jenjang,
+    //     'qrcode' => asset('storage/uploads/qrcodes/' . $transak->qrcode),
+    // ];
+
+    public function printLabel($id)
+    {
+        // Ambil data Transak berdasarkan $id
+        $transak = Transak::findOrFail($id);
+
+        // Ambil data no inventaris dan jml mutasi dari transaksi
+        $label = [
+            'no_inventaris' => $transak->no_inventaris,
+            'jml_mutasi' => $transak->jml_mutasi,
+            'qrcode' => asset('storage/uploads/qrcodes/' . $transak->qrcode),
+        ];
+
+        // Inisialisasi array untuk menyimpan label-label inventaris
+        $labels = [];
+
+        // Generate label inventaris dengan format no_inventaris-no_urut sesuai dengan jml_mutasi
+        for ($i = 1; $i <= $label['jml_mutasi']; $i++) {
+            $labels[] = [
+                'no_inventaris' => $label['no_inventaris'] . '-' . $i,
+                'qrcode' => $label['qrcode'],
+            ];
+        }
+
+        // Tampilkan data no inventaris dan qrcode nya di view
+        return view('transaks.print_label', compact('labels'));
     }
 }

@@ -35,6 +35,10 @@
                             <div class="table-responsive">
                                 <table class="table table-hover table-striped">
                                     <tr>
+                                        <td class="fw-bold">{{ __('Kategori Barang') }}</td>
+                                        <td>{{ $barang->kategori_barang }}</td>
+                                    </tr>
+                                    <tr>
                                         <td class="fw-bold">{{ __('Nama Barang') }}</td>
                                         <td>{{ $barang->nama_barang }}</td>
                                     </tr>
@@ -69,8 +73,8 @@
                                     <tr>
                                         <td class="fw-bold">{{ __('Foto') }}</td>
                                         <td>
-                                            <img src="{{ asset('storage/' . $barang->foto_barang) }}" alt="{{ $barang->nama_barang }}"
-                                                class="img-fluid" style="max-width: 200px" />
+                                            <img src="{{ asset('storage/uploads/barang/' . $barang->foto_barang) }}" alt="{{ $barang->nama_barang }}"
+                                            class="img-thumbnail" style="max-width: 200px" />
                                         </td>
                                    
                                 </table>

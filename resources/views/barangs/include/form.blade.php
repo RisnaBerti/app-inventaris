@@ -1,4 +1,38 @@
 <div class="row mb-2">
+    {{-- <div class="col-md-6">
+        <div class="form-group">
+            <label for="kategori">{{ __('Kategori') }}</label>
+            <select class="form-select @error('kategori') is-invalid @enderror" name="kategori" id="kategori" class="form-control" required>
+                <option value="" selected disabled>-- {{ __('Select kategori') }} --</option>
+                @foreach ($kategoris as $kategori)
+                    <option value="{{ $kategori->id }}"
+                        {{ isset($barang) && $barang->kategori_id == $kategori->id ? 'selected' : (old('kategori') == $kategori->id ? 'selected' : '') }}>
+                        {{ $kategori->nama_kategori }}
+                    </option>
+                @endforeach
+            </select>
+            @error('kategori')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div> --}}
+    {{-- jenis barang --}}
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="kategori-barang">{{ __('Kategori Barang') }}</label>
+            <input type="text" name="kategori_barang" id="kategori-barang"
+            class="form-control @error('kategori_barang') is-invalid @enderror"
+            value="{{ isset($barang) ? $barang->kategori_barang : old('kategori_barang') }}"
+            placeholder="{{ __('Kategori Barang') }}" required />
+            @error('kategori_barang')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div>
     <div class="col-md-6">
         <div class="form-group">
             <label for="nama-barang">{{ __('Nama Barang') }}</label>
