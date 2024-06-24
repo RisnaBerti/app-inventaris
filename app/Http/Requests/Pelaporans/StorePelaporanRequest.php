@@ -23,7 +23,7 @@ class StorePelaporanRequest extends FormRequest
             // 'barang_id' => 'nullable|exists:App\Models\Barang,id',
 			// 'ruangan_id' => 'nullable|exists:App\Models\Ruangan,id',
 			'transak_id' => 'required|exists:App\Models\Transak,id',
-			'no_inventaris' => 'required|string|max:50',
+			// 'no_inventaris' => 'required|string|max:50',
 			'jml_baik' => 'nullable|numeric',
 			'jml_kurang_baik' => 'nullable|numeric',
 			'jml_rusak_berat' => 'nullable|numeric',

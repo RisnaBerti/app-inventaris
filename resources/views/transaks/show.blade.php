@@ -38,42 +38,46 @@
                                         <td class="fw-bold">{{ __('Barang') }}</td>
                                         <td>{{ $transak->barang ? $transak->barang->nama_barang : '' }}</td>
                                     </tr>
-									<tr>
+                                    <tr>
                                         <td class="fw-bold">{{ __('Ruangan') }}</td>
                                         <td>{{ $transak->ruangan ? $transak->ruangan->nama_ruangan : '' }}</td>
                                     </tr>
-									<tr>
-                                            <td class="fw-bold">{{ __('Tgl Mutasi') }}</td>
-                                            <td>{{ isset($transak->tgl_mutasi) ? $transak->tgl_mutasi->format('d/m/Y') : ''  }}</td>
-                                        </tr>
-									<tr>
-                                            <td class="fw-bold">{{ __('Jenis Mutasi') }}</td>
-                                            <td>{{ $transak->jenis_mutasi }}</td>
-                                        </tr>
-									<tr>
-                                            <td class="fw-bold">{{ __('Tahun Akademik') }}</td>
-                                            <td>{{ $transak->tahun_akademik }}</td>
-                                        </tr>
-									<tr>
-                                            <td class="fw-bold">{{ __('Periode') }}</td>
-                                            <td>{{ isset($transak->periode) ? $transak->periode->format('m/Y') : ''  }}</td>
-                                        </tr>
-									<tr>
-                                            <td class="fw-bold">{{ __('Jml Mutasi') }}</td>
-                                            <td>{{ $transak->jml_mutasi }}</td>
-                                        </tr>
-									<tr>
-                                            <td class="fw-bold">{{ __('Tempat Asal') }}</td>
-                                            <td>{{ $transak->tempat_asal }}</td>
-                                        </tr>
-                                    {{-- <tr>
-                                        <td class="fw-bold">{{ __('Created at') }}</td>
-                                        <td>{{ $transak->created_at->format('d/m/Y H:i') }}</td>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Tgl Mutasi') }}</td>
+                                        <td>{{ isset($transak->tgl_mutasi) ? $transak->tgl_mutasi->format('d/m/Y') : '' }}
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td class="fw-bold">{{ __('Updated at') }}</td>
-                                        <td>{{ $transak->updated_at->format('d/m/Y H:i') }}</td>
-                                    </tr> --}}
+                                        <td class="fw-bold">{{ __('Jenis Mutasi') }}</td>
+                                        <td>{{ $transak->jenis_mutasi }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Tahun Akademik') }}</td>
+                                        <td>{{ $transak->tahun_akademik }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Periode') }}</td>
+                                        <td>{{ isset($transak->periode) ? $transak->periode->format('m/Y') : '' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Jml Mutasi') }}</td>
+                                        <td>{{ $transak->jml_mutasi }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Tempat Asal') }}</td>
+                                        <td>{{ $transak->tempat_asal }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('No Inventaris') }}</td>
+                                        <td>{{ $transak->no_inventaris }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('QR Code') }}</td>                                       
+                                        <td>
+                                            <img src="{{ asset('storage/uploads/qrcodes/' .  $transak->qrcode ) }}" alt="{{  $transak->qrcode }}"
+                                            class="img-thumbnail" style="max-width: 200px" />
+                                        </td>
+                                    </tr>
                                 </table>
                             </div>
 

@@ -23,9 +23,9 @@
         <div class="form-group">
             <label for="kategori-barang">{{ __('Kategori Barang') }}</label>
             <input type="text" name="kategori_barang" id="kategori-barang"
-            class="form-control @error('kategori_barang') is-invalid @enderror"
-            value="{{ isset($barang) ? $barang->kategori_barang : old('kategori_barang') }}"
-            placeholder="{{ __('Kategori Barang') }}" required />
+                class="form-control @error('kategori_barang') is-invalid @enderror"
+                value="{{ isset($barang) ? $barang->kategori_barang : old('kategori_barang') }}"
+                placeholder="{{ __('Kategori Barang') }}" required />
             @error('kategori_barang')
                 <span class="text-danger">
                     {{ $message }}
@@ -59,6 +59,11 @@
                     {{ $message }}
                 </span>
             @enderror
+            {{-- @isset($barang) --}}
+                <div id="kode-barang" class="form-text ">
+                    {{ __('Kode barang wajib unik.') }}
+                </div>
+            {{-- @endisset --}}
         </div>
     </div>
     <div class="col-md-6">
@@ -155,8 +160,10 @@
     <div class="col-md-6">
         <div class="form-group">
             <label for="foto-barang">{{ __('Foto Barang') }}</label>
-            <input type="file" name="foto_barang" id="foto-barang" class="form-control @error('foto_barang') is-invalid @enderror"
-                value="{{ isset($barang) ? $barang->foto_barang : old('foto_barang') }}" placeholder="{{ __('Foto Barang') }}" />
+            <input type="file" name="foto_barang" id="foto-barang"
+                class="form-control @error('foto_barang') is-invalid @enderror"
+                value="{{ isset($barang) ? $barang->foto_barang : old('foto_barang') }}"
+                placeholder="{{ __('Foto Barang') }}" />
             @error('foto_barang')
                 <span class="text-danger">
                     {{ $message }}

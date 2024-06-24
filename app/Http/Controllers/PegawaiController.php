@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jenjang;
 use App\Models\Pegawai;
-use App\Http\Requests\Pegawais\{StorePegawaiRequest, UpdatePegawaiRequest};
 use Yajra\DataTables\Facades\DataTables;
+use App\Http\Requests\Pegawais\{StorePegawaiRequest, UpdatePegawaiRequest};
 
 class PegawaiController extends Controller
 {
@@ -37,9 +38,13 @@ class PegawaiController extends Controller
                 'pegawais.no_tlpn',
                 'pegawais.jenis_jenjang',
                 'pegawais.nama_sekolah',
-                'users.name AS user_name'
+                'users.name AS user_name',
+                'jenjangs.nama_jenjang AS nama_jenjang',
+                'jenjangs.kode_jenjang AS kode_jenjang',
+                'jenjangs.id AS jenjang_id',
             )
                 ->join('users', 'users.id', '=', 'pegawais.user_id')
+                ->join('jenjangs', 'jenjangs.id', '=', 'pegawais.jenjang_id')
                 ->get();
 
                 return DataTables::of($pegawais)
@@ -61,7 +66,8 @@ class PegawaiController extends Controller
      */
     public function create(): \Illuminate\Contracts\View\View
     {
-        return view('pegawais.create');
+        $jenjangs = Jenjang::all();
+        return view('pegawais.create', compact('jenjangs'));
     }
 
     /**

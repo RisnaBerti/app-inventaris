@@ -26,8 +26,9 @@ class Pegawai extends Model
         'jabatan', 
         'no_tlpn', 
         'alamat', 
-        'jenis_jenjang',
+        // 'jenis_jenjang',
         'nama_sekolah',
+        'jenjang_id'
     ];
 
     /**
@@ -39,7 +40,7 @@ class Pegawai extends Model
         'jabatan' => 'string', 
         'no_tlpn' => 'string', 
         'alamat' => 'string', 
-        'jenis_jenjang' => 'string',
+        // 'jenis_jenjang' => 'string',
         'nama_sekolah' => 'string',
         'created_at' => 'datetime:d/m/Y H:i', 
         'updated_at' => 'datetime:d/m/Y H:i'

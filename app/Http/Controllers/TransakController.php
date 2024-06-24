@@ -159,10 +159,10 @@ class TransakController extends Controller
         ]);
 
         // Jika jenis_mutasi adalah 'Barang Masuk', tambahkan jumlah barang
-        if ($request->jenis_mutasi == 'Barang Masuk') {
-            $barang->jml_barang += $request->jml_mutasi;
-            $barang->save();
-        }
+        // if ($request->jenis_mutasi == 'Barang Masuk') {
+        //     $barang->jml_barang += $request->jml_mutasi;
+        //     $barang->save();
+        // }
         // elseif ($request->jenis_mutasi == 'Barang Keluar') {
         //     $barang = \App\Models\Barang::find($request->barang_id);
         //     $barang->jml_barang -= $request->jml_mutasi;
@@ -230,17 +230,17 @@ class TransakController extends Controller
         $barang = \App\Models\Barang::find($request->barang_id);
 
         // Revert the changes made by the original transaction
-        if ($originalJenisMutasi == 'Barang Masuk') {
-            $barang->jml_barang -= $originalJmlMutasi;
-        }
+        // if ($originalJenisMutasi == 'Barang Masuk') {
+        //     $barang->jml_barang -= $originalJmlMutasi;
+        // }
         // elseif ($originalJenisMutasi == 'Barang Keluar') {
         //     $barang->jml_barang += $originalJmlMutasi;
         // }
 
         // Apply the changes based on the updated transaction
-        if ($request->jenis_mutasi == 'Barang Masuk') {
-            $barang->jml_barang += $request->jml_mutasi;
-        }
+        // if ($request->jenis_mutasi == 'Barang Masuk') {
+        //     $barang->jml_barang += $request->jml_mutasi;
+        // }
         // elseif ($request->jenis_mutasi == 'Barang Keluar') {
         //     $barang->jml_barang -= $request->jml_mutasi;
         // }
@@ -308,6 +308,7 @@ class TransakController extends Controller
             'no_inventaris' => $transak->no_inventaris,
             'jml_mutasi' => $transak->jml_mutasi,
             'qrcode' => asset('storage/uploads/qrcodes/' . $transak->qrcode),
+            
         ];
 
         // Inisialisasi array untuk menyimpan label-label inventaris

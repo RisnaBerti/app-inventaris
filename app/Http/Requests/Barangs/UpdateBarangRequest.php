@@ -22,10 +22,10 @@ class UpdateBarangRequest extends FormRequest
         return [
             'kategori_barang' => 'required|string|max:25',
             'nama_barang' => 'required|string|max:50',
-            'kode_barang' => 'required|string|max:15',
+            'kode_barang' => 'required|string|max:15|unique',
             'merk_model' => 'required|string|max:25',
-            'ukuran' => 'required|string|max:25',
-            'bahan' => 'required|string|max:25',
+            'ukuran' => 'string|max:25',
+            'bahan' => 'string|max:25',
             'tahun_pembuatan_pembelian' => 'required|numeric',
             'satuan' => 'required|string|max:25',
             'jml_barang' => 'required|numeric',

@@ -40,7 +40,7 @@
             @enderror
             @isset($user)
                 <div id="passwordHelpBlock" class="form-text">
-                    {{ __('Leave the password & password confirmation blank if you don`t want to change them.') }}
+                    {{ __('Biarkan kata sandi & konfirmasi kata sandi kosong jika Anda tidak ingin mengubahnya.') }}
                 </div>
             @endisset
         </div>

@@ -7,9 +7,9 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-8 order-md-1 order-last">
-                    <h3>{{ __('Profile') }}</h3>
+                    <h3>{{ __('Profil') }}</h3>
                     <p class="text-subtitle text-muted">
-                        {{ __('Change your profile information, password and enable/disable two factor authentication.') }}
+                        {{ __('Ubah informasi profil Anda dan Kata Sandi.') }}
                     </p>
                 </div>
                 <x-breadcrumb>
@@ -29,7 +29,7 @@
             {{-- Profile --}}
             <div class="row">
                 <div class="col-md-3">
-                    <h4>{{ __('Profile') }}</h4>
+                    <h4>{{ __('Profil') }}</h4>
                 </div>
                 <div class="col-md-9">
                     <div class="card">
@@ -109,7 +109,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <h4>{{ __('Change Password') }}</h4>
+                    <h4>{{ __('Ubah Kata Sandi') }}</h4>
                 </div>
 
                 <div class="col-md-9">
@@ -119,10 +119,10 @@
                                 @csrf
                                 @method('put')
                                 <div class="form-group">
-                                    <label for="password">{{ __('Current Password') }}</label>
+                                    <label for="password">{{ __('Kata sandi saat ini') }}</label>
                                     <input type="password" name="current_password"
                                         class="form-control @error('current_password', 'updatePassword') is-invalid @enderror"
-                                        id="password" placeholder="Current Password" required>
+                                        id="password" placeholder="Kata sandi saat ini" required>
                                     @error('current_password', 'updatePassword')
                                         <span class="text-danger">
                                             {{ $message }}
@@ -131,10 +131,10 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="password">{{ __('New Password') }}</label>
+                                    <label for="password">{{ __('Password Baru') }}</label>
                                     <input type="password" name="password"
                                         class="form-control @error('password', 'updatePassword') is-invalid @enderror"
-                                        id="password" placeholder="New Password" required>
+                                        id="password" placeholder="Password Baru" required>
                                     @error('password', 'updatePassword')
                                         <span class="text-danger">
                                             {{ $message }}
@@ -143,12 +143,12 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="password_confirmation">{{ __('Confirm Password') }}</label>
+                                    <label for="password_confirmation">{{ __('Konfirmasi Password Baru') }}</label>
                                     <input type="password" class="form-control" id="password_confirmation"
-                                        name="password_confirmation" placeholder="Confirm Password" required>
+                                        name="password_confirmation" placeholder="Konfirmasi Password Baru" required>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary">{{ __('Change Password') }}</button>
+                                <button type="submit" class="btn btn-primary">{{ __('Update Password') }}</button>
                             </form>
                         </div>
                     </div>
@@ -156,7 +156,7 @@
             </div>
 
             {{-- 2FA --}}
-            <div class="row">
+            {{-- <div class="row">
                 <div class="col-md-12">
                     <hr class="mb-5">
                 </div>
@@ -169,7 +169,6 @@
                         <div class="card-body">
                             <form method="post" action="/user/two-factor-authentication">
                                 @csrf
-                                {{-- if user activate two factor authentication --}}
                                 @if (auth()->user()->two_factor_secret)
                                     @method('delete')
 
@@ -197,7 +196,6 @@
                                 @endif
                             </form>
 
-                            {{-- generate recovery codes --}}
                             @if (auth()->user()->two_factor_secret)
                                 <form method="POST" action="/user/two-factor-recovery-codes">
                                     @csrf
@@ -209,7 +207,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </section>
     </div>
 @endsection

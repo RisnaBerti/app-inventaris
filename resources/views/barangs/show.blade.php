@@ -76,6 +76,7 @@
                                             <img src="{{ asset('storage/uploads/barang/' . $barang->foto_barang) }}" alt="{{ $barang->nama_barang }}"
                                             class="img-thumbnail" style="max-width: 200px" />
                                         </td>
+                                    </tr>
                                    
                                 </table>
                             </div>

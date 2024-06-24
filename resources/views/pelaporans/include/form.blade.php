@@ -26,7 +26,8 @@
                 <select class="form-select @error('transak_id') is-invalid @enderror" name="transak_id" id="transak-id" required>
                     <option value="" selected disabled>-- {{ __('Select transak') }} --</option>
                     @foreach ($data as $transak)
-                        <option value="{{ $transak->id }}" {{ old('transak_id', $pelaporan->transak_id ?? '') == $transak->id ? 'selected' : '' }}>                            
+                        <option value="{{ $transak->id }}" {{ old('transak_id', $pelaporan->transak_id ?? '') == $transak->id ? 'selected' : '' }}>   
+                            {{ $transak->no_inventaris }} -                         
                             {{ $transak->barang->nama_barang }} - 
                             {{ $transak->barang->kode_barang }} - 
                             {{ $transak->ruangan->jenjang->nama_jenjang ?? 'N/A' }} - 
@@ -50,20 +51,22 @@
     
     
     
-    <div class="col-md-6">
+    {{-- <div class="col-md-6">
         <div class="form-group">
             <label for="no-inventari">{{ __('No Inventaris') }}</label>
             <input type="text" name="no_inventaris" id="no-inventari"
                 class="form-control @error('no_inventaris') is-invalid @enderror"
                 value="{{ isset($pelaporan) ? $pelaporan->no_inventaris : old('no_inventaris') }}"
-                placeholder="{{ __('No Inventaris') }}" required />
+                placeholder="{{ __('No Inventaris') }}"/>
             @error('no_inventaris')
                 <span class="text-danger">
                     {{ $message }}
                 </span>
             @enderror
         </div>
-    </div>
+    </div> --}}
+
+
     <div class="col-md-6">
         <div class="form-group">
             <label for="jml-baik">{{ __('Jml Baik') }}</label>

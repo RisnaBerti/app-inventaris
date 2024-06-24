@@ -12,7 +12,7 @@
             <div id="auth-left">
                 <div class="logo">
                     <a href="/">
-                        <img src="{{ asset('logo.jpg') }}" alt="Logo" style="width: 200px; height: auto;">
+                        {{-- <img src="{{ asset('logo.jpg') }}" alt="Logo" style="width: 200px; height: auto;"> --}}
                         {{-- <img src="{{ asset('mazer') }}/static/images/logo/logo.svg" alt="Logo"> --}}
                     </a>
                 </div>

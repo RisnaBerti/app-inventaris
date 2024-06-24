@@ -3,8 +3,9 @@
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
+                    <h2>Inventaris</h2>
                     <a href="/">
-                        <img src="{{ asset('logo.jpg') }}" alt="Logo" style="width: 130px; height: auto;">
+                        {{-- <img src="{{ asset('logo.jpg') }}" alt="Logo" style="width: 130px; height: auto;"> --}}
                     </a>
                 </div>
                 <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
@@ -97,7 +98,7 @@
                     @endif
                 @endforeach
 
-                @if (env('APP_ENV') === 'local')
+                {{-- @if (env('APP_ENV') === 'local')
                     <li class="sidebar-title">{{ __('Generators') }}</li>
 
                     <li class="sidebar-item{{ request()->is('generators/create') ? ' active' : '' }}">
@@ -106,14 +107,14 @@
                             <span> {{ __('CRUD Generator') }}</span>
                         </a>
                     </li>
-                @endif
+                @endif --}}
 
-                <li class="sidebar-title">Account</li>
+                <li class="sidebar-title">Pengaturan Akun</li>
 
                 <li class="sidebar-item{{ request()->is('profile') ? ' active' : '' }}">
                     <a class="sidebar-link" href="{{ route('profile') }}">
                         <i class="bi bi-person-badge-fill"></i>
-                        <span> {{ __('Profile') }}</span>
+                        <span> {{ __('Profil') }}</span>
                     </a>
                 </li>
 
@@ -121,7 +122,7 @@
                     <a class="sidebar-link" href="{{ route('logout') }}"
                         onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                         <i class="bi bi-door-open-fill"></i>
-                        <span> {{ __('Logout') }}</span>
+                        <span> {{ __('Keluar') }}</span>
                     </a>
 
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

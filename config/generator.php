@@ -109,109 +109,110 @@ return [
      * This code below always changes when you use a generator and maybe you must lint or format the code.
      */
     'sidebars' => [
-    [
-        'header' => 'Main',
-        'permissions' => [
-            'test view',
-            'barang view',
-            'ruangan view',
-            'transak view',
-            'pelaporan view',
-            'laporan view',
-            'dashboard view'
+        [
+            'header' => 'Data Master',
+            'permissions' => [
+                'jenjang view'
+            ],
+            'menus' => [
+                [
+                    'title' => 'Jenjang',
+                    'icon' => '<i class="bi bi-mortarboard"></i>',
+                    'route' => '/jenjangs',
+                    'permission' => 'jenjang view',
+                    'permissions' => [],
+                    'submenus' => []
+                ]
+            ]
         ],
-        'menus' => [
-            [
-                'title' => 'Data Barang',
-                'icon' => '<i class="bi bi-box"></i>',
-                'route' => '/barangs',
-                'permission' => 'barang view',
-                'permissions' => [],
-                'submenus' => []
+        [
+            'header' => 'Menu Utama',
+            'permissions' => [
+                'test view',
+                'barang view',
+                'ruangan view',
+                'transak view',
+                'pelaporan view',
+                'laporan view',
+                'dashboard view'
             ],
-            [
-                'title' => 'Data Ruangan',
-                'icon' => '<i class="bi bi-journal-text"></i>',
-                'route' => '/ruangans',
-                'permission' => 'ruangan view',
-                'permissions' => [],
-                'submenus' => []
+            'menus' => [
+                [
+                    'title' => 'Data Barang',
+                    'icon' => '<i class="bi bi-box"></i>',
+                    'route' => '/barangs',
+                    'permission' => 'barang view',
+                    'permissions' => [],
+                    'submenus' => []
+                ],
+                [
+                    'title' => 'Data Ruangan',
+                    'icon' => '<i class="bi bi-building"></i>',
+                    'route' => '/ruangans',
+                    'permission' => 'ruangan view',
+                    'permissions' => [],
+                    'submenus' => []
+                ],
+                [
+                    'title' => 'Transaksi',
+                    'icon' => '<i class="bi bi-receipt"></i>',
+                    'route' => '/transaks',
+                    'permission' => 'transak view',
+                    'permissions' => [],
+                    'submenus' => []
+                ],
+                [
+                    'title' => 'Inventaris',
+                    'icon' => '<i class="bi bi-archive"></i>',
+                    'route' => '/pelaporans',
+                    'permission' => 'pelaporan view',
+                    'permissions' => [],
+                    'submenus' => []
+                ],
+                [
+                    'title' => 'Laporan',
+                    'icon' => '<i class="bi bi-bar-chart"></i>',
+                    'route' => '/laporans',
+                    'permission' => 'laporan view',
+                    'permissions' => [],
+                    'submenus' => []
+                ]
+            ]
+        ],
+        [
+            'header' => 'Users',
+            'permissions' => [
+                'user view',
+                'role & permission view',
+                'pegawai view'
             ],
-            [
-                'title' => 'Transaksi',
-                'icon' => '<i class="bi bi-journal-text"></i>',
-                'route' => '/transaks',
-                'permission' => 'transak view',
-                'permissions' => [],
-                'submenus' => []
-            ],
-            [
-                'title' => 'Inventaris',
-                'icon' => '<i class="bi bi-journal-text"></i>',
-                'route' => '/pelaporans',
-                'permission' => 'pelaporan view',
-                'permissions' => [],
-                'submenus' => []
-            ],
-            [
-                'title' => 'Laporan',
-                'icon' => '<i class="bi bi-journal-text"></i>',
-                'route' => '/laporans',
-                'permission' => 'laporan view',
-                'permissions' => [],
-                'submenus' => []
+            'menus' => [
+                [
+                    'title' => 'Users',
+                    'icon' => '<i class="bi bi-people-fill"></i>',
+                    'route' => '/users',
+                    'permission' => 'user view',
+                    'permissions' => [],
+                    'submenus' => []
+                ],
+                [
+                    'title' => 'Roles & permissions',
+                    'icon' => '<i class="bi bi-person-check-fill"></i>',
+                    'route' => '/roles',
+                    'permission' => 'role & permission view',
+                    'permissions' => [],
+                    'submenus' => []
+                ],
+                [
+                    'title' => 'Pegawai',
+                    'icon' => '<i class="bi bi-people-fill"></i>',
+                    'route' => '/pegawais',
+                    'permission' => 'pegawai view',
+                    'permissions' => [],
+                    'submenus' => []
+                ]
             ]
         ]
-    ],
-    [
-        'header' => 'Users',
-        'permissions' => [
-            'user view',
-            'role & permission view',
-            'pegawai view'
-        ],
-        'menus' => [
-            [
-                'title' => 'Users',
-                'icon' => '<i class="bi bi-people-fill"></i>',
-                'route' => '/users',
-                'permission' => 'user view',
-                'permissions' => [],
-                'submenus' => []
-            ],
-            [
-                'title' => 'Roles & permissions',
-                'icon' => '<i class="bi bi-person-check-fill"></i>',
-                'route' => '/roles',
-                'permission' => 'role & permission view',
-                'permissions' => [],
-                'submenus' => []
-            ],
-            [
-                'title' => 'Pegawai',
-                'icon' => '<i class="bi bi-briefcase"></i>',
-                'route' => '/pegawais',
-                'permission' => 'pegawai view',
-                'permissions' => [],
-                'submenus' => []
-            ]
-        ]
-    ],
-    [
-        'header' => 'Data Masters',
-        'permissions' => [
-            'jenjang view'
-        ],
-        'menus' => [
-            [
-                'title' => 'Jenjangs',
-                'icon' => '<i class="bi bi-journal-text"></i>',
-                'route' => '/jenjangs',
-                'permission' => 'jenjang view',
-                'permissions' => [],
-                'submenus' => []
-            ]
-        ]
+
     ]
-]
 ];

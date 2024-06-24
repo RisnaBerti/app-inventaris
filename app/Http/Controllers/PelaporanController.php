@@ -33,21 +33,22 @@ class PelaporanController extends Controller
                 ->join('barangs', 'transaks.barang_id', '=', 'barangs.id')
                 ->join('ruangans', 'transaks.ruangan_id', '=', 'ruangans.id')
                 ->join('jenjangs', 'ruangans.jenjang_id', '=', 'jenjangs.id') // Correct join
-                ->select('pelaporans.*', 
-                    'barangs.nama_barang', 
-                    'barangs.kode_barang', 
-                    'barangs.merk_model', 
-                    'barangs.ukuran', 
-                    'barangs.bahan', 
-                    'barangs.tahun_pembuatan_pembelian', 
-                    'ruangans.nama_ruangan', 
+                ->select(
+                    'pelaporans.*',
+                    'barangs.nama_barang',
+                    'barangs.kode_barang',
+                    'barangs.merk_model',
+                    'barangs.ukuran',
+                    'barangs.bahan',
+                    'barangs.tahun_pembuatan_pembelian',
+                    'ruangans.nama_ruangan',
                     'jenjangs.nama_jenjang', // Add the field to select statement
-                    'transaks.tahun_akademik', 
+                    'transaks.tahun_akademik',
                     'transaks.jml_mutasi'
                 );
-    
+
             return DataTables::of($pelaporans)
-                ->addColumn('nama_barang', function ($row) {
+                ->addColumn('ruangan', function ($row) {
                     return $row->nama_jenjang . ' - ' . $row->nama_ruangan;
                 })
                 ->addColumn('kode_barang', function ($row) {
@@ -65,8 +66,8 @@ class PelaporanController extends Controller
                 ->addColumn('tahun_pembuatan_pembelian', function ($row) {
                     return $row->tahun_pembuatan_pembelian ?? '';
                 })
-                ->addColumn('ruangan', function ($row) {
-                    return $row->nama_ruangan ?? '';
+                ->addColumn('nama_barang', function ($row) {
+                    return $row->nama_barang ?? '';
                 })
                 ->addColumn('tahun_akademik', function ($row) {
                     return $row->tahun_akademik ?? '';
@@ -78,10 +79,10 @@ class PelaporanController extends Controller
                 ->addIndexColumn()
                 ->toJson();
         }
-    
+
         return view('pelaporans.index');
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -89,7 +90,7 @@ class PelaporanController extends Controller
     public function create(): \Illuminate\Contracts\View\View
     {
         $data = Transak::with(['barang', 'ruangan.jenjang'])
-        ->get();
+            ->get();
 
         return view('pelaporans.create', ['data' => $data, 'pelaporan' => null]);
     }
@@ -107,7 +108,10 @@ class PelaporanController extends Controller
 
         Pelaporan::create($data); // simpan data ke dalam database
 
-        // Pelaporan::create($request->validated());
+        //update jml_barang di tabel barang, dari seluruh total_barang di tabel pelaporans
+        $transak = Transak::find($request->transak_id);
+        $transak->barang->increment('jml_barang', $total_barang);
+        $transak->barang->save();
 
         return to_route('pelaporans.index')->with('success', __('The pelaporan was created successfully.'));
     }
@@ -119,9 +123,9 @@ class PelaporanController extends Controller
     {
         // $pelaporan->load('barang:id,nama_barang', 'ruangan:id,nama_ruangan', 'transak:id,tahun_akademik');
         $pelaporan->load([
-            'barang:id,nama_barang', 
-            'ruangan:id,nama_ruangan,jenjang_id', 
-            'ruangan.jenjang:id,nama_jenjang', 
+            'barang:id,nama_barang',
+            'ruangan:id,nama_ruangan,jenjang_id',
+            'ruangan.jenjang:id,nama_jenjang',
             'transak:id,tahun_akademik'
         ]);
 
@@ -146,23 +150,63 @@ class PelaporanController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
     public function update(UpdatePelaporanRequest $request, Pelaporan $pelaporan): \Illuminate\Http\RedirectResponse
     {
-        // Hitung total_barang
-        $total_barang = $request->jml_hilang + $request->jml_baik + $request->jml_kurang_baik + $request->jml_rusak_berat;
+        // Retrieve the current total_barang before updating
+        $currentTotalBarang = $pelaporan->total_barang;
 
-        // Update data pelaporan dengan menambahkan total_barang ke dalam data yang akan disimpan
-        $pelaporan->update(array_merge($request->validated(), ['total_barang' => $total_barang]));
+        // Calculate new total_barang
+        $newTotalBarang = $request->jml_hilang + $request->jml_baik + $request->jml_kurang_baik + $request->jml_rusak_berat;
+
+        // Update the pelaporan with the new data, including the new total_barang
+        $pelaporan->update(array_merge($request->validated(), ['total_barang' => $newTotalBarang]));
+
+        // Find the related transaction and the associated barang
+        $transak = Transak::find($request->transak_id);
+        $barang = $transak->barang;
+
+        // Adjust jml_barang in the barang table
+        // Subtract the old total_barang
+        $barang->decrement('jml_barang', $currentTotalBarang);
+        // Add the new total_barang
+        $barang->increment('jml_barang', $newTotalBarang);
+
+        // Save the changes to the barang
+        $barang->save();
 
         return to_route('pelaporans.index')->with('success', __('The pelaporan was updated successfully.'));
     }
 
+
     /**
      * Remove the specified resource from storage.
      */
+    // public function destroy(Pelaporan $pelaporan): \Illuminate\Http\RedirectResponse
+    // {
+    //     try {
+    //         $pelaporan->delete();
+
+    //         return to_route('pelaporans.index')->with('success', __('The pelaporan was deleted successfully.'));
+    //     } catch (\Throwable $th) {
+    //         return to_route('pelaporans.index')->with('error', __("The pelaporan can't be deleted because it's related to another table."));
+    //     }
+    // }
+
     public function destroy(Pelaporan $pelaporan): \Illuminate\Http\RedirectResponse
     {
         try {
+            // Retrieve the related Transak and Barang before deleting the Pelaporan
+            $transak = Transak::find($pelaporan->transak_id);
+            $barang = $transak->barang;
+
+            // Decrement jml_barang in the barang table by the pelaporan's total_barang
+            $barang->decrement('jml_barang', $pelaporan->total_barang);
+
+            // Save changes to the barang table
+            $barang->save();
+
+            // Delete the Pelaporan record
             $pelaporan->delete();
 
             return to_route('pelaporans.index')->with('success', __('The pelaporan was deleted successfully.'));

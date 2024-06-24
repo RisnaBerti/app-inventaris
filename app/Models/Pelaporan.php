@@ -21,7 +21,15 @@ class Pelaporan extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['transak_id', 'no_inventaris', 'jml_baik', 'jml_kurang_baik', 'jml_rusak_berat', 'jml_hilang', 'keterangan', 'total_barang'];
+    protected $fillable = [
+        'transak_id',
+        'jml_baik', 
+        'jml_kurang_baik', 
+        'jml_rusak_berat', 
+        'jml_hilang',
+        'keterangan', 
+        'total_barang'
+    ];
 
     /**
      * The attributes that should be cast.
@@ -29,18 +37,18 @@ class Pelaporan extends Model
      * @var string[]
      */
     protected $casts = ['no_inventaris' => 'string', 'jml_baik' => 'integer', 'jml_kurang_baik' => 'integer', 'jml_rusak_berat' => 'integer', 'total_barang' => 'integer', 'jml_hilang' => 'integer', 'keterangan' => 'string', 'created_at' => 'datetime:d/m/Y H:i', 'updated_at' => 'datetime:d/m/Y H:i'];
-    
 
-	public function barang()
-	{
-		return $this->belongsTo(\App\Models\Barang::class);
-	}	
-	public function ruangan()
-	{
-		return $this->belongsTo(\App\Models\Ruangan::class);
-	}	
-	public function transak()
-	{
-		return $this->belongsTo(\App\Models\Transak::class);
-	}
+
+    public function barang()
+    {
+        return $this->belongsTo(\App\Models\Barang::class);
+    }
+    public function ruangan()
+    {
+        return $this->belongsTo(\App\Models\Ruangan::class);
+    }
+    public function transak()
+    {
+        return $this->belongsTo(\App\Models\Transak::class);
+    }
 }

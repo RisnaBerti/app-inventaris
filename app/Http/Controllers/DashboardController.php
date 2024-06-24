@@ -20,7 +20,6 @@ class DashboardController extends Controller
 
         // Fetch and process data
         $data = Transak::with('barang', 'ruangan')
-            ->where('jenis_mutasi', 'Barang Keluar')
             ->whereYear('tgl_mutasi', $selectedYear)
             ->get();
 
