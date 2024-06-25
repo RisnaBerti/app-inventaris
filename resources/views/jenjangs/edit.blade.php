@@ -32,7 +32,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{ route('jenjangs.update', $jenjang->id) }}" method="POST">
+                            <form action="{{ route('jenjangs.update', $jenjang->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
 

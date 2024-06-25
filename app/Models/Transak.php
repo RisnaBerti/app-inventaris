@@ -62,4 +62,9 @@ class Transak extends Model
 	{
 		return $this->belongsTo(\App\Models\Ruangan::class);
 	}
+
+    public function jenjang()
+    {
+        return $this->hasOneThrough(Jenjang::class, Ruangan::class, 'id', 'id', 'ruangan_id', 'jenjang_id');
+    }
 }

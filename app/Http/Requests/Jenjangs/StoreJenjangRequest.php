@@ -22,6 +22,7 @@ class StoreJenjangRequest extends FormRequest
         return [
             'kode_jenjang' => 'required|string|max:25',
 			'nama_jenjang' => 'required|string|max:10',
+            'nama_sekolah' => 'nullable|string|max:30',
         ];
     }
 }

@@ -93,12 +93,12 @@
 
                 @foreach ($jenjangs as $jenjang)
                     <option value="{{ $jenjang->id }}"
-                        {{ isset($ruangan) && $ruangan->jenjang_id == $jenjang->id ? 'selected' : (old('jenjang_id') == $jenjang->id ? 'selected' : '') }}>
+                        {{ isset($pegawai) && $pegawai->jenjang_id == $jenjang->id ? 'selected' : (old('jenjang_id') == $jenjang->id ? 'selected' : '') }}>
                         {{ $jenjang->nama_jenjang }}
                     </option>
                 @endforeach
             </select>
-            @error('jenjang_id')
+            @error('jenjang_id')    
                 <span class="text-danger">
                     {{ $message }}
                 </span>

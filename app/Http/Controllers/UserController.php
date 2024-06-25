@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Users\{StoreUserRequest, UpdateUserRequest};
 use App\Models\User;
+use Intervention\Image\Facades\Image;
 use Yajra\DataTables\Facades\DataTables;
-use Image;
+use App\Http\Requests\Users\{StoreUserRequest, UpdateUserRequest};
 
 class UserController extends Controller
 {

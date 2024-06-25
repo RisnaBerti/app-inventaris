@@ -21,7 +21,12 @@ class Jenjang extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['kode_jenjang', 'nama_jenjang'];
+    protected $fillable = [
+        'kode_jenjang', 
+        'nama_jenjang',
+        'foto_jenjang',
+        'nama_sekolah'
+    ];
 
     /**
      * The attributes that should be cast.

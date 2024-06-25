@@ -6,7 +6,7 @@
             </p>
         </div>
         <div class="float-end">
-            <p>Develop by Risna Berti for
+            <p>Software Development Team for
                 <a href="https://prabubimatech.com" target="_blank">PRABU BIMA TECH</a>
             </p>
         </div>

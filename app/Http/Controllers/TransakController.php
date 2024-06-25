@@ -301,14 +301,14 @@ class TransakController extends Controller
     public function printLabel($id)
     {
         // Ambil data Transak berdasarkan $id
-        $transak = Transak::findOrFail($id);
+        $transak = Transak::with('ruangan.jenjang')->findOrFail($id);
 
         // Ambil data no inventaris dan jml mutasi dari transaksi
         $label = [
             'no_inventaris' => $transak->no_inventaris,
             'jml_mutasi' => $transak->jml_mutasi,
             'qrcode' => asset('storage/uploads/qrcodes/' . $transak->qrcode),
-            
+            'foto_jenjang' => asset('storage/uploads/logos/' . $transak->ruangan->jenjang->foto_jenjang),
         ];
 
         // Inisialisasi array untuk menyimpan label-label inventaris
@@ -319,6 +319,7 @@ class TransakController extends Controller
             $labels[] = [
                 'no_inventaris' => $label['no_inventaris'] . '-' . $i,
                 'qrcode' => $label['qrcode'],
+                'foto_jenjang' => $label['foto_jenjang'],
             ];
         }
 

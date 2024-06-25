@@ -42,6 +42,17 @@
                                         <td class="fw-bold">{{ __('Nama Jenjang') }}</td>
                                         <td>{{ $jenjang->nama_jenjang }}</td>
                                     </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Nama Sekolah') }}</td>
+                                        <td>{{ $jenjang->nama_sekolah }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Logo') }}</td>
+                                        <td>
+                                            <img src="{{ asset('storage/uploads/logos/' . $jenjang->foto_jenjang) }}" alt="{{ $jenjang->nama_jenjang }}"
+                                            class="img-thumbnail" style="max-width: 200px" />
+                                        </td>
+                                    </tr>
                                 </table>
                             </div>
 

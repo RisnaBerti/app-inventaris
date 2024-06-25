@@ -21,14 +21,14 @@ class Pegawai extends Model
      *
      * @var string[]
      */
-    protected $fillable = [
+    protected $fillable = [        
+        'jenjang_id',
         'user_id', 
         'jabatan', 
         'no_tlpn', 
         'alamat', 
         // 'jenis_jenjang',
         'nama_sekolah',
-        'jenjang_id'
     ];
 
     /**
@@ -40,7 +40,6 @@ class Pegawai extends Model
         'jabatan' => 'string', 
         'no_tlpn' => 'string', 
         'alamat' => 'string', 
-        // 'jenis_jenjang' => 'string',
         'nama_sekolah' => 'string',
         'created_at' => 'datetime:d/m/Y H:i', 
         'updated_at' => 'datetime:d/m/Y H:i'

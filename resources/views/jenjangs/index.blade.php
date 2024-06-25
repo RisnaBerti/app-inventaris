@@ -39,8 +39,11 @@
                                 <table class="table table-striped" id="data-table" width="100%">
                                     <thead>
                                         <tr>
+                                            <th>{{ __('No') }}</th>
                                             <th>{{ __('Kode Jenjang') }}</th>
 											<th>{{ __('Nama Jenjang') }}</th>
+                                            <th>{{ __('Nama Sekolah') }}</th>
+                                            <th>{{ __('Foto') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -69,12 +72,47 @@
             ajax: "{{ route('jenjangs.index') }}",
             columns: [
                 {
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
                     data: 'kode_jenjang',
                     name: 'kode_jenjang',
                 },
 				{
                     data: 'nama_jenjang',
                     name: 'nama_jenjang',
+                },
+                {
+                    data: 'nama_sekolah',
+                    name: 'nama_sekolah',
+                },
+                {
+                    data: 'foto_jenjang',
+                    name: 'foto_jenjang',
+                    orderable: false,
+                    searchable: false,
+                    render: function(data, type, full, meta) {
+                        if (data) {
+                            // Cek jika data adalah tautan PDF
+                            if (data.endsWith('.pdf')) {
+                                var fileName = data.split('/').pop();
+                                return `<a href="${data}" target="_blank">${fileName}</a>`;
+                            } else {
+                                // Jika bukan PDF, maka asumsikan data adalah URL gambar
+                                return `
+                                        <img src="${data}" class="img-thumbnail" width="200" height="150" style="object-fit: cover alt="Logo"  >
+                                   `;
+                            }
+                        } else {
+                            // Tampilkan placeholder jika data dokumen kosong
+                            return `
+                                    <img src="https://via.placeholder.com/350?text=No+Image+Available" alt="No Image Available">
+                               `;
+                        }
+                    }
                 },
                 {
                     data: 'action',
