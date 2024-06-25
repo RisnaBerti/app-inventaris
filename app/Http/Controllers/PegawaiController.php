@@ -23,7 +23,7 @@ class PegawaiController extends Controller
     public function index(): \Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse
     {
         // $pegawais = Pegawai::with('user:id,name');
-        
+
 
         // var_dump($pegawais);
         // die();
@@ -47,7 +47,7 @@ class PegawaiController extends Controller
                 ->join('jenjangs', 'jenjangs.id', '=', 'pegawais.jenjang_id')
                 ->get();
 
-                return DataTables::of($pegawais)
+            return DataTables::of($pegawais)
                 ->addColumn('user', function ($row) {
                     return $row->user_name;
                 })
@@ -96,9 +96,10 @@ class PegawaiController extends Controller
      */
     public function edit(Pegawai $pegawai): \Illuminate\Contracts\View\View
     {
-        $pegawai->load('user:id,name');
+        $pegawai->load('jenjang', 'user:id,name');
+        $jenjangs = Jenjang::all(); // atau dapat menggunakan $pegawai->jenjang jika sudah dimuat relasinya
 
-        return view('pegawais.edit', compact('pegawai'));
+        return view('pegawais.edit', compact('pegawai', 'jenjangs'));
     }
 
     /**

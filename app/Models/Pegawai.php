@@ -50,4 +50,9 @@ class Pegawai extends Model
 	{
 		return $this->belongsTo(\App\Models\User::class);
 	}
+
+    public function jenjang()
+    {
+        return $this->belongsTo(\App\Models\Jenjang::class);
+    }
 }

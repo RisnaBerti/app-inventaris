@@ -56,6 +56,10 @@ class TransakController extends Controller
         if (request()->ajax()) {
             // $transaks = Transak::with('barang:id,nama_barang', 'ruangan:id,nama_ruangan');
 
+            // $user = auth()->user();
+            // $pegawai = $user->pegawai;
+
+
             $transaks = Transak::select([
                 'transaks.id AS id_transaksi',
                 'transaks.no_inventaris',
@@ -80,6 +84,8 @@ class TransakController extends Controller
                 ->join('jenjangs', 'jenjangs.id', '=', 'ruangans.jenjang_id')
                 ->with('ruangan.jenjang')
                 ->get();
+
+            // $transaks->where('jenjang_id', $pegawai->jenjang_id);
 
             return DataTables::of($transaks)
                 ->addColumn('nama_ruangan', function ($transak) {
@@ -108,6 +114,74 @@ class TransakController extends Controller
 
         );
     }
+
+    // public function index()
+    // {
+    //     if (request()->ajax()) {
+    //         $user = auth()->user();
+
+    //         // Pastikan user memiliki data pegawai terkait
+    //         if (!$user->pegawai) {
+    //             return response()->json(['error' => 'User tidak memiliki data pegawai terkait.']);
+    //         }
+
+    //         // Ambil id jenjang dari pegawai yang terkait dengan user
+    //         $jenjang_id = $user->pegawai->jenjang_id;
+    //         dd($jenjang_id);
+
+    //         // Ambil data transaksi dengan menggunakan select yang sesuai
+    //         $transaks = Transak::select([
+    //             'transaks.id AS id_transaksi',
+    //             'transaks.no_inventaris',
+    //             'transaks.jenis_pengadaan',
+    //             'transaks.tgl_mutasi',
+    //             'transaks.jenis_mutasi',
+    //             'transaks.tahun_akademik',
+    //             'transaks.periode',
+    //             'transaks.jml_mutasi',
+    //             'transaks.tempat_asal',
+    //             'transaks.qrcode',
+    //             'barangs.id AS id_barang',
+    //             'barangs.nama_barang',
+    //             'barangs.kode_barang',
+    //             'ruangans.id AS id_ruangan',
+    //             'ruangans.nama_ruangan',
+    //             'ruangans.jenjang_id',
+    //             'jenjangs.nama_jenjang',
+    //         ])
+    //             ->join('barangs', 'barangs.id', '=', 'transaks.barang_id')
+    //             ->join('ruangans', 'ruangans.id', '=', 'transaks.ruangan_id')
+    //             ->join('jenjangs', 'jenjangs.id', '=', 'ruangans.jenjang_id')
+    //             ->where('ruangans.jenjang_id', $jenjang_id) // Filter berdasarkan jenjang pegawai
+    //             ->get();
+
+    //         // Proses data untuk DataTables
+    //         return DataTables::of($transaks)
+    //             ->addColumn('nama_ruangan', function ($transak) {
+    //                 if ($transak->jenjang_id && $transak->nama_jenjang) {
+    //                     return $transak->nama_jenjang . ' - ' . $transak->nama_ruangan;
+    //                 } else {
+    //                     return 'Data Ruangan Tidak Tersedia';
+    //                 }
+    //             })
+    //             ->addColumn('qrcode', function ($row) {
+    //                 if ($row->qrcode == null) {
+    //                     return 'belum ada gambar';
+    //                 }
+    //                 return asset('storage/uploads/qrcodes/' . $row->qrcode);
+    //             })
+    //             ->addColumn('action', function ($row) {
+    //                 return view('transaks.include.action', ['transak' => $row]);
+    //             })
+    //             ->addIndexColumn()
+    //             ->toJson();
+    //     }
+
+    //     // Jika bukan request ajax, tampilkan view biasa
+    //     return view('transaks.index');
+    // }
+
+
 
     /**
      * Show the form for creating a new resource.

@@ -124,18 +124,6 @@
                     data: 'jml_mutasi',
                     name: 'jml_mutasi',
                 },
-                // {
-                //     data: 'jml_baik',
-                //     name: 'jml_baik',
-                // },
-                // {
-                //     data: 'jml_kurang_baik',
-                //     name: 'jml_kurang_baik',
-                // },
-                // {
-                //     data: 'jml_rusak_berat',
-                //     name: 'jml_rusak_berat',
-                // },
                 {
                     data: 'tempat_asal',
                     name: 'tempat_asal',
