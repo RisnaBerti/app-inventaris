@@ -84,7 +84,7 @@
             @enderror
         </div>
     </div> --}}
-    <div class="col-md-6">
+    {{-- <div class="col-md-6">
         <div class="form-group">
             <label for="jenjang-id">{{ __('Jenjang') }}</label>
             <select class="form-select @error('jenjang_id') is-invalid @enderror" name="jenjang_id" id="jenjang-id"
@@ -104,5 +104,5 @@
                 </span>
             @enderror
         </div>
-    </div>
+    </div> --}}
 </div>

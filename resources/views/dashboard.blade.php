@@ -6,15 +6,6 @@
     <div class="page-heading">
         <h3>Dashboard</h3>
     </div>
-
-    {{-- hitung total barang, total user, total ruangan --}}
-    @php
-        $total_barang = \App\Models\Barang::count();
-        $total_user = \App\Models\User::count();
-        $total_ruangan = \App\Models\Ruangan::count();
-    @endphp
-
-
     <div class="page-content">
         <section class="row">
             <div class="col-12 ">
@@ -29,7 +20,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Jumlah Pegawai</h6>
+                                        <h6 class="text-muted font-semibold">Jumlah Pengguna</h6>
                                         <h6 class="font-extrabold mb-0">{{ $total_user }}</h6>
                                     </div>
                                 </div>

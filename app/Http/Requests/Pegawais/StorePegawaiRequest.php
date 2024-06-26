@@ -20,7 +20,7 @@ class StorePegawaiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'jenjang_id' => 'required|exists:App\Models\Jenjang,id',
+            // 'jenjang_id' => 'required|exists:App\Models\Jenjang,id',
             'user_id' => 'required|exists:App\Models\User,id',
 			'jabatan' => 'required|string|max:50',
 			'no_tlpn' => 'nullable|string|max:15',

@@ -3,12 +3,9 @@
         <div class="form-group">
             <label for="name">{{ __('Nama') }}</label>
             <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror"
-                placeholder="{{ __('Name') }}" value="{{ isset($user) ? $user->name : old('name') }}" required
-                autofocus>
+                   placeholder="{{ __('Name') }}" value="{{ isset($user) ? $user->name : old('name') }}" required autofocus>
             @error('name')
-                <span class="text-danger">
-                    {{ $message }}
-                </span>
+                <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
     </div>
@@ -16,13 +13,10 @@
     <div class="col-md-6">
         <div class="form-group">
             <label for="email">{{ __('Email') }}</label>
-            <input type="email" name="email" id="email"
-                class="form-control @error('email') is-invalid @enderror" placeholder="{{ __('Email') }}"
-                value="{{ isset($user) ? $user->email : old('email') }}" required>
+            <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror"
+                   placeholder="{{ __('Email') }}" value="{{ isset($user) ? $user->email : old('email') }}" required>
             @error('email')
-                <span class="text-danger">
-                    {{ $message }}
-                </span>
+                <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
     </div>
@@ -31,16 +25,14 @@
         <div class="form-group">
             <label for="password">{{ __('Password') }}</label>
             <input type="password" name="password" id="password"
-                class="form-control @error('password') is-invalid @enderror" placeholder="{{ __('Password') }}"
-                {{ empty($user) ? 'required' : '' }}>
+                   class="form-control @error('password') is-invalid @enderror" placeholder="{{ __('Password') }}"
+                   {{ empty($user) ? 'required' : '' }}>
             @error('password')
-                <span class="text-danger">
-                    {{ $message }}
-                </span>
+                <span class="text-danger">{{ $message }}</span>
             @enderror
             @isset($user)
                 <div id="passwordHelpBlock" class="form-text">
-                    {{ __('Biarkan kata sandi & konfirmasi kata sandi kosong jika Anda tidak ingin mengubahnya.') }}
+                    {{ __('Leave password & password confirmation blank if you do not want to change them.') }}
                 </div>
             @endisset
         </div>
@@ -50,7 +42,7 @@
         <div class="form-group">
             <label for="password-confirmation">{{ __('Password Confirmation') }}</label>
             <input type="password" name="password_confirmation" id="password-confirmation" class="form-control"
-                placeholder="{{ __('Password Confirmation') }}" {{ empty($user) ? 'required' : '' }}>
+                   placeholder="{{ __('Password Confirmation') }}" {{ empty($user) ? 'required' : '' }}>
         </div>
     </div>
 
@@ -58,17 +50,30 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="role">{{ __('Role') }}</label>
-                <select class="form-select" name="role" id="role" class="form-control" required>
+                <select class="form-select" name="role" id="role" required>
                     <option value="" selected disabled>-- Select role --</option>
                     @foreach ($roles as $role)
                         <option value="{{ $role->id }}">{{ $role->name }}</option>
                     @endforeach
-                    @error('role')
-                        <span class="text-danger">
-                            {{ $message }}
-                        </span>
-                    @enderror
                 </select>
+                @error('role')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="jenjang_id">{{ __('Jenjang') }}</label>
+                <select class="form-select" name="jenjang_id" id="jenjang_id" required>
+                    <option value="" selected disabled>{{ __('-- Select jenjang --') }}</option>
+                    @foreach ($jenjangs as $jenjang)
+                        <option value="{{ $jenjang->id }}">{{ $jenjang->nama_jenjang }}</option>
+                    @endforeach
+                </select>
+                @error('jenjang_id')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
         </div>
 
@@ -76,11 +81,9 @@
             <div class="form-group">
                 <label for="avatar">{{ __('Avatar') }}</label>
                 <input type="file" name="avatar" id="avatar"
-                    class="form-control @error('avatar') is-invalid @enderror">
+                       class="form-control @error('avatar') is-invalid @enderror">
                 @error('avatar')
-                    <span class="text-danger">
-                        {{ $message }}
-                    </span>
+                    <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
         </div>
@@ -91,18 +94,32 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="role">{{ __('Role') }}</label>
-                    <select class="form-select" name="role" id="role" class="form-control" required>
+                    <select class="form-select" name="role" id="role" required>
                         <option value="" selected disabled>{{ __('-- Select role --') }}</option>
                         @foreach ($roles as $role)
                             <option value="{{ $role->id }}"
-                                {{ $user->getRoleNames()->toArray() !== [] && $user->getRoleNames()[0] == $role->name ? 'selected' : '-' }}>
+                                {{ $user->getRoleNames()->isNotEmpty() && $user->getRoleNames()->first() == $role->name ? 'selected' : '' }}>
                                 {{ $role->name }}</option>
                         @endforeach
                     </select>
                     @error('role')
-                        <span class="text-danger">
-                            {{ $message }}
-                        </span>
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="jenjang_id">{{ __('Jenjang') }}</label>
+                    <select class="form-select" name="jenjang_id" id="jenjang_id" required>
+                        <option value="" selected disabled>{{ __('-- Select jenjang --') }}</option>
+                        @foreach ($jenjangs as $jenjang)
+                            <option value="{{ $jenjang->id }}" {{ $user->jenjang_id == $jenjang->id ? 'selected' : '' }}>
+                                {{ $jenjang->nama_jenjang }}</option>
+                        @endforeach
+                    </select>
+                    @error('jenjang_id')
+                        <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
             </div>
@@ -110,8 +127,7 @@
             <div class="col-md-1 text-center">
                 <div class="avatar avatar-xl">
                     @if ($user->avatar == null)
-                        <img src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}&s=500"
-                            alt="avatar">
+                        <img src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}&s=500" alt="avatar">
                     @else
                         <img src="{{ asset("uploads/images/avatars/$user->avatar") }}" alt="avatar">
                     @endif
@@ -123,9 +139,7 @@
                     <label for="avatar">{{ __('Avatar') }}</label>
                     <input type="file" name="avatar" class="form-control @error('avatar') is-invalid @enderror" id="avatar">
                     @error('avatar')
-                        <span class="text-danger">
-                            {{ $message }}
-                        </span>
+                        <span class="text-danger">{{ $message }}</span>
                     @enderror
                     @if ($user->avatar == null)
                         <div id="passwordHelpBlock" class="form-text">

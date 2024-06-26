@@ -41,6 +41,7 @@
                                         <tr>
                                             <th>{{ __('No') }}</th>
                                             <th>{{ __('Kategori Barang') }}</th>
+                                            <th>{{ __('Jenjang') }}</th>
                                             <th>{{ __('Nama Barang') }}</th>
                                             <th>{{ __('Kode Barang') }}</th>
                                             <th>{{ __('Merk Model') }}</th>
@@ -89,6 +90,10 @@
                 {
                     data: 'kategori_barang',
                     name: 'kategori_barang',
+                },
+                {
+                    data: 'nama_jenjang',
+                    name: 'nama_jenjang',
                 },
                 {
                     data: 'nama_barang',

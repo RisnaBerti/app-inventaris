@@ -43,8 +43,8 @@
                                             <th>{{ __('Jabatan') }}</th>
                                             <th>{{ __('No Tlpn') }}</th>
                                             <th>{{ __('Alamat') }}</th>
-                                            <th>{{ __('Kode Jenjang') }}</th>
-                                            <th>{{ __('Nama Jenjang') }}</th>
+                                            {{-- <th>{{ __('Kode Jenjang') }}</th>
+                                            <th>{{ __('Nama Jenjang') }}</th> --}}
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -91,14 +91,14 @@
                     data: 'alamat',
                     name: 'alamat',
                 },
-                {
-                    data: 'kode_jenjang',
-                    name: 'kode_jenjang',
-                },
-                {
-                    data: 'nama_jenjang',
-                    name: 'nama_jenjang',
-                },
+                // {
+                //     data: 'kode_jenjang',
+                //     name: 'kode_jenjang',
+                // },
+                // {
+                //     data: 'nama_jenjang',
+                //     name: 'nama_jenjang',
+                // },
                 {
                     data: 'action',
                     name: 'action',

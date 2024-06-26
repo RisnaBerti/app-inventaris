@@ -33,6 +33,29 @@
             @enderror
         </div>
     </div>
+    
+    {{-- jenjang id --}}
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="jenjang-id">{{ __('Jenjang') }}</label>
+            <select class="form-select @error('jenjang_id') is-invalid @enderror" name="jenjang_id" id="jenjang-id"
+                class="form-control" required>
+                <option value="" selected disabled>-- {{ __('Select jenjang') }} --</option>
+                @foreach ($jenjangs as $jenjang)
+                    <option value="{{ $jenjang->id }}"
+                        {{ isset($barang) && $barang->jenjang_id == $jenjang->id ? 'selected' : (old('jenjang_id') == $jenjang->id ? 'selected' : '') }}>
+                        {{ $jenjang->nama_jenjang }}
+                    </option>
+                @endforeach
+            </select>
+            @error('jenjang_id')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div>
+
     <div class="col-md-6">
         <div class="form-group">
             <label for="nama-barang">{{ __('Nama Barang') }}</label>
@@ -149,7 +172,7 @@
             <input type="number" name="jml_barang" id="jml-barang"
                 class="form-control @error('jml_barang') is-invalid @enderror"
                 value="{{ isset($barang) ? $barang->jml_barang : old('jml_barang') }}"
-                placeholder="{{ __('Jml Barang') }}" value="0" required readonly />
+                placeholder="{{ __('Jml Barang') }}" value="0"/>
             @error('jml_barang')
                 <span class="text-danger">
                     {{ $message }}

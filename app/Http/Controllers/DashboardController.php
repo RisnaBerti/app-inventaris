@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Barang;
+use App\Models\Ruangan;
 use App\Models\Transak;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
@@ -15,13 +19,25 @@ class DashboardController extends Controller
 
     public function index(Request $request)
     {
+        // $jenjang_id = auth()->user()->jenjang_id;
+        $jenjang_id = auth()->user()->jenjang_id;
+
         // Get the selected year from the request, default to current year
         $selectedYear = $request->input('year', date('Y'));
 
-        // Fetch and process data
-        $data = Transak::with('barang', 'ruangan')
-            ->whereYear('tgl_mutasi', $selectedYear)
-            ->get();
+        if ($jenjang_id == null) {
+            // Fetch and process data
+            $data = Transak::with('barang', 'ruangan', 'ruangan.jenjang')
+                ->whereYear('tgl_mutasi', $selectedYear)
+                ->get();
+        } else {
+            $data = Transak::with('barang', 'ruangan', 'ruangan.jenjang')
+                ->whereHas('ruangan', function ($query) use ($jenjang_id) {
+                    $query->where('jenjang_id', $jenjang_id);
+                })
+                ->whereYear('tgl_mutasi', $selectedYear)
+                ->get();
+        }
 
         // Get unique years for the filter
         $years = Transak::select(DB::raw('YEAR(tgl_mutasi) as year'))
@@ -38,7 +54,24 @@ class DashboardController extends Controller
             ];
         }
 
+        if ($jenjang_id == null) {
+            //get total jml barang
+            $total_barang = Barang::count();
+            //get total jml ruangan
+            $total_ruangan = Ruangan::count();
+            //get total jml user
+            $total_user = User::count();
+        } else {
+            // get total jml barang
+            $total_barang = Barang::where('jenjang_id', $jenjang_id)->count();
+            // get total jml ruangan
+            $total_ruangan = Ruangan::where('jenjang_id', $jenjang_id)->count();
+            // get total jml user
+            $total_user = User::where('jenjang_id', $jenjang_id)->count();
+        }
 
-        return view('dashboard', compact('formattedData', 'years', 'selectedYear'));
+        // dd($total_barang);
+
+        return view('dashboard', compact('formattedData', 'years', 'selectedYear', 'total_barang', 'total_ruangan', 'total_user'));
     }
 }

@@ -40,4 +40,14 @@ class Jenjang extends Model
     {
         return $this->hasMany(Ruangan::class);
     }
+
+    public function barang()
+    {
+        return $this->hasMany(Barang::class);
+    }
+
+    public function user()
+    {
+        return $this->hasMany(User::class);
+    }
 }

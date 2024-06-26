@@ -21,8 +21,7 @@ class Pegawai extends Model
      *
      * @var string[]
      */
-    protected $fillable = [        
-        'jenjang_id',
+    protected $fillable = [
         'user_id', 
         'jabatan', 
         'no_tlpn', 

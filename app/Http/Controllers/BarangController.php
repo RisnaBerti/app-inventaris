@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
+use App\Models\Jenjang;
+use function Laravel\Prompts\alert;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
+
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Barangs\{StoreBarangRequest, UpdateBarangRequest};
-
-use function Laravel\Prompts\alert;
 
 class BarangController extends Controller
 {
@@ -26,7 +27,16 @@ class BarangController extends Controller
     public function index(): \Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse
     {
         if (request()->ajax()) {
-            $barangs = Barang::query();
+            //get jenjang_id dari user yang login
+            $jenjang_id = auth()->user()->jenjang_id;
+
+            //jika user tidak memiliki jenjang_id maka get semua data barang
+            if ($jenjang_id == null) {
+                $barangs = Barang::with('jenjang')->select('barangs.*');
+            } else {
+                // $barangs = Barang::with('jenjang')->select('barangs.*')->where('jenjang_id', $jenjang_id);
+                $barangs = Barang::with('jenjang')->where('jenjang_id', $jenjang_id)->get();
+            }
 
             return DataTables::of($barangs)
                 ->addColumn('foto_barang', function ($row) {
@@ -34,6 +44,9 @@ class BarangController extends Controller
                         return 'belum ada gambar';
                     }
                     return asset('storage/uploads/barang/' . $row->foto_barang);
+                })
+                ->addColumn('nama_jenjang', function ($row) {
+                    return $row->jenjang ? $row->jenjang->nama_jenjang : 'Tidak ada jenjang';
                 })
                 ->addColumn('action', 'barangs.include.action')
                 ->addIndexColumn()
@@ -48,7 +61,16 @@ class BarangController extends Controller
      */
     public function create(): \Illuminate\Contracts\View\View
     {
-        return view('barangs.create');
+        //get jenjang_id dari user
+        $jenjang_id = auth()->user()->jenjang_id;
+
+        if ($jenjang_id == null) {
+            $jenjangs = Jenjang::all();
+        } else {
+            $jenjangs = Jenjang::where('id', $jenjang_id)->get();
+        }
+
+        return view('barangs.create', compact('jenjangs'));
     }
 
     /**
@@ -101,7 +123,16 @@ class BarangController extends Controller
      */
     public function edit(Barang $barang): \Illuminate\Contracts\View\View
     {
-        return view('barangs.edit', compact('barang'));
+        // jenjang
+        $jenjang_id = auth()->user()->jenjang_id;
+
+        if ($jenjang_id == null) {
+            $jenjangs = Jenjang::all();
+        } else {
+            $jenjangs = Jenjang::where('id', $jenjang_id)->get();
+        }
+
+        return view('barangs.edit', compact('barang', 'jenjangs'));
     }
 
     /**

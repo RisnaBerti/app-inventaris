@@ -44,6 +44,7 @@
                                             <th>{{ __('Name') }}</th>
                                             <th>{{ __('Email') }}</th>
                                             <th>{{ __('Role') }}</th>
+                                            <th>{{ __('Jenjang') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -99,6 +100,10 @@
                 {
                     data: 'role',
                     name: 'role'
+                },
+                {
+                    data: 'nama_jenjang',
+                    name: 'nama_jenjang'
                 },
                 // {
                 //     data: 'created_at',

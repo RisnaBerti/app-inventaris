@@ -8,6 +8,7 @@ use App\Models\Pelaporan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Barang;
+use App\Models\User;
 use Yajra\DataTables\Facades\DataTables;
 
 class LaporanController extends Controller
@@ -23,32 +24,71 @@ class LaporanController extends Controller
     {
         //jika ajax
         if ($request->ajax()) {
-            $pelaporans = Pelaporan::with(['transak' => function ($query) {
-                $query->with('barang:id,nama_barang,kode_barang,merk_model,ukuran,bahan,tahun_pembuatan_pembelian')
-                    ->with('ruangan:id,nama_ruangan');
-            }])
-                ->join('transaks', 'pelaporans.transak_id', '=', 'transaks.id')
-                ->join('barangs', 'transaks.barang_id', '=', 'barangs.id')
-                ->join('ruangans', 'transaks.ruangan_id', '=', 'ruangans.id')
-                ->select(
-                    'pelaporans.*',
-                    'barangs.nama_barang',
-                    'barangs.kode_barang',
-                    'barangs.merk_model',
-                    'barangs.ukuran',
-                    'barangs.bahan',
-                    'barangs.tahun_pembuatan_pembelian',
-                    'ruangans.nama_ruangan',
-                    'transaks.tahun_akademik',
-                    'transaks.jml_mutasi'
-                );
+            $jenjang_id = auth()->user()->jenjang_id;
 
-            if ($request->ruangan_id) {
-                $pelaporans = $pelaporans->where('transaks.ruangan_id', $request->ruangan_id);
-            }
+            if ($jenjang_id == null) {
+                $pelaporans = Pelaporan::with(['transak' => function ($query) {
+                    $query->with('barang:id,nama_barang,kode_barang,merk_model,ukuran,bahan,tahun_pembuatan_pembelian')
+                        ->with('ruangan:id,nama_ruangan');
+                }])
+                    ->join('transaks', 'pelaporans.transak_id', '=', 'transaks.id')
+                    ->join('barangs', 'transaks.barang_id', '=', 'barangs.id')
+                    ->join('ruangans', 'transaks.ruangan_id', '=', 'ruangans.id')
+                    ->join('jenjangs', 'ruangans.jenjang_id', '=', 'jenjangs.id')
+                    ->select(
+                        'pelaporans.*',
+                        'barangs.nama_barang',
+                        'barangs.kode_barang',
+                        'barangs.merk_model',
+                        'barangs.ukuran',
+                        'barangs.bahan',
+                        'barangs.tahun_pembuatan_pembelian',
+                        'ruangans.nama_ruangan',
+                        'transaks.tahun_akademik',
+                        'transaks.jml_mutasi',
+                        'transaks.no_inventaris',
+                        'jenjangs.nama_jenjang',
+                    );
 
-            if ($request->tahun_akademik) {
-                $pelaporans = $pelaporans->where('transaks.tahun_akademik', $request->tahun_akademik);
+                if ($request->ruangan_id) {
+                    $pelaporans = $pelaporans->where('transaks.ruangan_id', $request->ruangan_id);
+                }
+
+                if ($request->tahun_akademik) {
+                    $pelaporans = $pelaporans->where('transaks.tahun_akademik', $request->tahun_akademik);
+                }
+            } else {
+                $pelaporans = Pelaporan::with(['transak' => function ($query) {
+                    $query->with('barang:id,nama_barang,kode_barang,merk_model,ukuran,bahan,tahun_pembuatan_pembelian')
+                        ->with('ruangan:id,nama_ruangan');
+                }])
+                    ->join('transaks', 'pelaporans.transak_id', '=', 'transaks.id')
+                    ->join('barangs', 'transaks.barang_id', '=', 'barangs.id')
+                    ->join('ruangans', 'transaks.ruangan_id', '=', 'ruangans.id')
+                    ->join('jenjangs', 'ruangans.jenjang_id', '=', 'jenjangs.id')
+                    ->where('ruangans.jenjang_id', $jenjang_id)
+                    ->select(
+                        'pelaporans.*',
+                        'barangs.nama_barang',
+                        'barangs.kode_barang',
+                        'barangs.merk_model',
+                        'barangs.ukuran',
+                        'barangs.bahan',
+                        'barangs.tahun_pembuatan_pembelian',
+                        'ruangans.nama_ruangan',
+                        'transaks.tahun_akademik',
+                        'transaks.jml_mutasi',
+                        'transaks.no_inventaris',
+                        'jenjangs.nama_jenjang',
+                    );
+
+                if ($request->ruangan_id) {
+                    $pelaporans = $pelaporans->where('transaks.ruangan_id', $request->ruangan_id);
+                }
+
+                if ($request->tahun_akademik) {
+                    $pelaporans = $pelaporans->where('transaks.tahun_akademik', $request->tahun_akademik);
+                }
             }
 
             return DataTables::of($pelaporans)
@@ -79,8 +119,9 @@ class LaporanController extends Controller
                 ->addColumn('jml_mutasi', function ($row) {
                     return $row->jml_mutasi ?? '';
                 })
-
-                // ->addColumn('action', 'pelaporans.include.action')
+                ->addColumn('no_inventaris', function ($row) {
+                    return $row->no_inventaris ?? '';
+                })
                 ->addIndexColumn()
                 ->toJson();
         }
@@ -99,68 +140,113 @@ class LaporanController extends Controller
         // Ambil nama ruangan berdasarkan ruangan_id
         $ruangan = Ruangan::find($ruangan_id);
 
-        $inventaris = Pelaporan::with(['transak' => function ($query) {
-            $query->with('barang:id,nama_barang,kode_barang,merk_model,ukuran,bahan,tahun_pembuatan_pembelian')
-                ->with('ruangan:id,nama_ruangan');
-        }])
-            ->join('transaks', 'pelaporans.transak_id', '=', 'transaks.id')
-            ->join('barangs', 'transaks.barang_id', '=', 'barangs.id')
-            ->join('ruangans', 'transaks.ruangan_id', '=', 'ruangans.id')
-            ->select(
-                'pelaporans.*',
-                'barangs.nama_barang',
-                'barangs.kode_barang',
-                'barangs.merk_model',
-                'barangs.ukuran',
-                'barangs.bahan',
-                'barangs.tahun_pembuatan_pembelian',
-                'ruangans.nama_ruangan',
-                'transaks.tahun_akademik',
-                'transaks.jml_mutasi'
-            );
+        $jenjang_id = auth()->user()->jenjang_id;
 
-        if ($ruangan_id) {
-            $inventaris = $inventaris->where('transaks.ruangan_id', $ruangan_id);
-        }
+        // Jika jenjang_id kosong, maka ambil semua data
+        // Jika jenjang_id tidak kosong, maka ambil data berdasarkan jenjang_id
+        if ($jenjang_id == null) {
+            $inventaris = Pelaporan::with(['transak' => function ($query) {
+                $query->with('barang:id,nama_barang,kode_barang,merk_model,ukuran,bahan,tahun_pembuatan_pembelian')
+                    ->with('ruangan:id,nama_ruangan');
+            }])
+                ->join('transaks', 'pelaporans.transak_id', '=', 'transaks.id')
+                ->join('barangs', 'transaks.barang_id', '=', 'barangs.id')
+                ->join('ruangans', 'transaks.ruangan_id', '=', 'ruangans.id')
+                ->select(
+                    'pelaporans.*',
+                    'barangs.nama_barang',
+                    'barangs.kode_barang',
+                    'barangs.merk_model',
+                    'barangs.ukuran',
+                    'barangs.bahan',
+                    'barangs.tahun_pembuatan_pembelian',
+                    'ruangans.nama_ruangan',
+                    'transaks.tahun_akademik',
+                    'transaks.jml_mutasi',
+                    'jenjangs.nama_jenjang',
+                    'jenjangs.id as jenjang',
 
-        if ($tahun_akademik) {
-            $inventaris = $inventaris->where('transaks.tahun_akademik', $tahun_akademik);
-        }
+                );
 
-        $inventaris = $inventaris->get(); // Pastikan data diambil dengan get()
-
-        // Get data name dari tabel user yang memiliki jabatan Kepala Sekolah dari tabel pegawai
-        $kepsek = Pegawai::join('users', 'pegawais.user_id', '=', 'users.id')
-            ->where('pegawais.jabatan', 'Kepala Sekolah')
-            ->select('users.name')
-            ->first();
-        $kepsek_name = $kepsek ? $kepsek->name : '';
-
-        // Get data name dari tabel user yang memiliki jabatan Waka Sapras dari tabel pegawai
-        $sapras = Pegawai::join('users', 'pegawais.user_id', '=', 'users.id')
-            ->where('pegawais.jabatan', 'Waka Sapras')
-            ->select('users.name')
-            ->first();
-        $sapras_name = $sapras ? $sapras->name : '';
-
-        // var_dump($kepsek_name);
-        // die();
-
-
-
-        return view('laporans.print', compact('inventaris', 'ruangan', 'tahun_akademik', 'kepsek_name', 'sapras_name'));
-    }
-
-    //fungsi dashboard
-    public function dashboard()
-    {
-        //get total jml barang
-        $total_barang = Barang::count();
-        //get total jml ruangan
-        $total_ruangan = Ruangan::count();
-        //get total jml user
-        $total_user = Pegawai::count();
-
-        return view('dashboard', compact('total_barang', 'total_ruangan', 'total_user'));
+            if ($ruangan_id) {
+                $inventaris = $inventaris->where('transaks.ruangan_id', $ruangan_id);
             }
+
+            if ($tahun_akademik) {
+                $inventaris = $inventaris->where('transaks.tahun_akademik', $tahun_akademik);
+            }
+            $inventaris = $inventaris->get(); // Pastikan data diambil dengan get()
+
+            $kepsek = Pegawai::join('users', 'pegawais.user_id', '=', 'users.id')
+                ->where('pegawais.jabatan', 'Kepala Yayasan')
+                ->select('users.name')
+                ->first();
+            $kepsek_name = $kepsek ? $kepsek->name : '';
+
+            $sapras = Pegawai::join('users', 'pegawais.user_id', '=', 'users.id')
+                ->where('pegawais.jabatan', 'Waka Sapras Pusat')
+                ->select('users.name')
+                ->first();
+            $sapras_name = $sapras ? $sapras->name : '';
+        } else {
+            $inventaris = Pelaporan::with(['transak' => function ($query) {
+                $query->with('barang:id,nama_barang,kode_barang,merk_model,ukuran,bahan,tahun_pembuatan_pembelian')
+                    ->with('ruangan:id,nama_ruangan');
+            }])
+                ->join('transaks', 'pelaporans.transak_id', '=', 'transaks.id')
+                ->join('barangs', 'transaks.barang_id', '=', 'barangs.id')
+                ->join('ruangans', 'transaks.ruangan_id', '=', 'ruangans.id')
+                ->join('jenjangs', 'ruangans.jenjang_id', '=', 'jenjangs.id')
+                ->where('jenjangs.id', $jenjang_id)
+                ->select(
+                    'pelaporans.*',
+                    'barangs.nama_barang',
+                    'barangs.kode_barang',
+                    'barangs.merk_model',
+                    'barangs.ukuran',
+                    'barangs.bahan',
+                    'barangs.tahun_pembuatan_pembelian',
+                    'ruangans.nama_ruangan',
+                    'transaks.tahun_akademik',
+                    'transaks.jml_mutasi',
+                    'jenjangs.nama_jenjang',
+                    'jenjangs.id as jenjang',
+
+                );
+
+            if ($ruangan_id) {
+                $inventaris = $inventaris->where('transaks.ruangan_id', $ruangan_id);
+            }
+
+            if ($tahun_akademik) {
+                $inventaris = $inventaris->where('transaks.tahun_akademik', $tahun_akademik);
+            }
+
+            $inventaris = $inventaris->get();
+
+            $kepsek = Pegawai::join('users', 'pegawais.user_id', '=', 'users.id')
+                ->where('pegawais.jabatan', 'Kepala Sekolah')
+                ->where('pegawais.jenjang_id', $jenjang_id)
+                ->select('users.name')
+                ->first();
+            $kepsek_name = $kepsek ? $kepsek->name : '';
+
+            $sapras = Pegawai::join('users', 'pegawais.user_id', '=', 'users.id')
+                ->where('pegawais.jabatan', 'Waka Sapras')
+                ->where('pegawais.jenjang_id', $jenjang_id)
+                ->select('users.name')
+                ->first();
+            $sapras_name = $sapras ? $sapras->name : '';
+        }
+
+        $namaSekolah = auth()->user()->jenjang->nama_sekolah;
+
+        if ($namaSekolah == null){
+            $namaSekolah = 'Pondok Pesantren DIY - Darul Qur\'an Wal Irsyad';
+        } else {
+            $namaSekolah = $namaSekolah;
+        }
+
+        return view('laporans.print', compact('inventaris', 'ruangan', 'tahun_akademik', 'kepsek_name', 'sapras_name', 'namaSekolah'));
+    }
 }

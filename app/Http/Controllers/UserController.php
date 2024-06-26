@@ -6,6 +6,7 @@ use App\Models\User;
 use Intervention\Image\Facades\Image;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Users\{StoreUserRequest, UpdateUserRequest};
+use App\Models\Jenjang;
 
 class UserController extends Controller
 {
@@ -30,12 +31,15 @@ class UserController extends Controller
     public function index(): \Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse
     {
         if (request()->ajax()) {
-            $users = User::with('roles:id,name');
+            $users = User::with('roles:id,name', 'jenjang:id,nama_jenjang');
 
             return Datatables::of($users)
                 ->addColumn('action', 'users.include.action')
                 ->addColumn('role', function ($row) {
                     return $row->getRoleNames()->toArray() !== [] ? $row->getRoleNames()[0] : '-';
+                })
+                ->addColumn('nama_jenjang', function ($row) {
+                    return $row->jenjang ? $row->jenjang->nama_jenjang : 'Tidak ada jenjang';
                 })
                 ->addColumn('avatar', function ($row) {
                     if ($row->avatar == null) {
@@ -55,7 +59,10 @@ class UserController extends Controller
      */
     public function create(): \Illuminate\Contracts\View\View
     {
-        return view('users.create');
+        $jenjangs = Jenjang::all();
+
+        // dd($)
+        return view('users.create', compact('jenjangs'));
     }
 
     /**
@@ -95,7 +102,7 @@ class UserController extends Controller
      */
     public function show(User $user): \Illuminate\Contracts\View\View
     {
-        $user->load('roles:id,name');
+        $user->load('roles:id,name', 'jenjang:id,nama_jenjang');
 
         return view('users.show', compact('user'));
     }
@@ -105,9 +112,11 @@ class UserController extends Controller
      */
     public function edit(User $user): \Illuminate\Contracts\View\View
     {
-        $user->load('roles:id,name');
+        $user->load('roles:id,name', 'jenjang:id,nama_jenjang');
 
-        return view('users.edit', compact('user'));
+        $jenjangs = Jenjang::all();
+
+        return view('users.edit', compact('user', 'jenjangs'));
     }
 
     /**

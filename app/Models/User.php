@@ -23,7 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'avatar'
+        'avatar',
+        'jenjang_id'
     ];
 
     /**
@@ -50,5 +51,10 @@ class User extends Authenticatable
     public function pegawai()
     {
         return $this->hasOne(\App\Models\Pegawai::class);
+    }
+
+    public function jenjang()
+    {
+        return $this->belongsTo(Jenjang::class);
     }
 }

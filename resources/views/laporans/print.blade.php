@@ -98,7 +98,7 @@
 
     <div class="container">
         <h2>LAPORAN PENEMPATAN BARANG</h2>
-        <h2>MA DARUL QUR'AN TAHUN {{ $tahun_akademik }}</h2> <!-- Menampilkan tahun akademik -->
+        <h2>{{ $namaSekolah }} {{ $tahun_akademik }}</h2> <!-- Menampilkan tahun akademik -->
 
         <br />
 

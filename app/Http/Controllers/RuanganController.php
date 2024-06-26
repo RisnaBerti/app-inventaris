@@ -24,14 +24,25 @@ class RuanganController extends Controller
     {
         if (request()->ajax()) {
             // $ruangans = Ruangan::query();
-            $ruangans = Ruangan::select([
-                'ruangans.id',
-                'ruangans.nama_ruangan',
-                'jenjangs.nama_jenjang',
-            ])
-            ->join('jenjangs', 'jenjangs.id', '=', 'ruangans.jenjang_id')
-            ->get();
+            $jenjang_id = auth()->user()->jenjang_id;
 
+            //if jenjang_id == null
+            if ($jenjang_id == null) {
+                $ruangans = Ruangan::select([
+                    'ruangans.id',
+                    'ruangans.nama_ruangan',
+                    'jenjangs.nama_jenjang',
+                ])
+                    ->join('jenjangs', 'jenjangs.id', '=', 'ruangans.jenjang_id');
+            } else {
+                $ruangans = Ruangan::select([
+                    'ruangans.id',
+                    'ruangans.nama_ruangan',
+                    'jenjangs.nama_jenjang',
+                ])
+                    ->join('jenjangs', 'jenjangs.id', '=', 'ruangans.jenjang_id')
+                    ->where('jenjang_id', $jenjang_id);
+            }
 
             return DataTables::of($ruangans)
                 ->addColumn('action', 'ruangans.include.action')
@@ -47,8 +58,13 @@ class RuanganController extends Controller
      */
     public function create(): \Illuminate\Contracts\View\View
     {
-        // return view('ruangans.edit', compact('ruangan'));
-        $jenjangs = Jenjang::all(); 
+        $jenjang_id = auth()->user()->jenjang_id;
+
+        if ($jenjang_id == null) {
+            $jenjangs = Jenjang::all();
+        } else {
+            $jenjangs = Jenjang::where('id', $jenjang_id)->get();
+        }
 
         return view('ruangans.create', compact('jenjangs'));
     }
@@ -59,7 +75,7 @@ class RuanganController extends Controller
     public function store(StoreRuanganRequest $request): \Illuminate\Http\RedirectResponse
     {
 
-        
+
         Ruangan::create($request->validated());
 
         return to_route('ruangans.index')->with('success', __('The ruangan was created successfully.'));
@@ -82,8 +98,13 @@ class RuanganController extends Controller
     {
         $ruangan->load('jenjang:id,nama_jenjang');
 
-        // return view('ruangans.edit', compact('ruangan'));
-        $jenjangs = Jenjang::all(); // Adjust this query based on your actual Jenjang model and requirements
+        $jenjang_id = auth()->user()->jenjang_id;
+
+        if ($jenjang_id == null) {
+            $jenjangs = Jenjang::all();
+        } else {
+            $jenjangs = Jenjang::where('id', $jenjang_id)->get();
+        }
 
         return view('ruangans.edit', compact('ruangan', 'jenjangs'));
     }
@@ -93,7 +114,7 @@ class RuanganController extends Controller
      */
     public function update(UpdateRuanganRequest $request, Ruangan $ruangan): \Illuminate\Http\RedirectResponse
     {
-        
+
         $ruangan->update($request->validated());
 
         return to_route('ruangans.index')->with('success', __('The ruangan was updated successfully.'));

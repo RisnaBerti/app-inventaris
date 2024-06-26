@@ -31,7 +31,8 @@ class Barang extends Model
         'tahun_pembuatan_pembelian', 
         'satuan', 
         'jml_barang',
-        'foto_barang'
+        'foto_barang',
+        'jenjang_id'
     ];
 
     /**
@@ -56,6 +57,11 @@ class Barang extends Model
     public function transaks()
     {
         return $this->hasMany(Transak::class);
+    }
+
+    public function jenjang()
+    {
+        return $this->belongsTo(Jenjang::class);
     }
 
 }
