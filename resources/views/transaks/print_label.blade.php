@@ -28,13 +28,13 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            margin: 10px;
+            margin-bottom: 10px;
             border: 1px solid;
             padding: 5px;
             width: 10rem;
         }
 
-        .no-gutters {
+        .no-gutters {  
             margin-right: 0;
             margin-left: 0;
         }

@@ -23,9 +23,9 @@ class StoreUserRequest extends FormRequest
         return [
             'name' => ['required', 'min:3', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
-            'avatar' => ['nullable', 'image', 'max:1024'],
+            'avatar' => ['nullable', 'mimes:jpeg,png,jpg', 'max:1024'],
             'role' => ['required', 'exists:roles,id'],
-            'jenjang_id' => ['required', 'exists:jenjang,id'],
+            'jenjang_id' => ['required', 'exists:jenjangs,id'],
             'password' =>  [
                 'required',
                 'confirmed',

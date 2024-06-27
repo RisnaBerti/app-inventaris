@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Barang;
+use App\Models\Jenjang;
 use App\Models\Pegawai;
 use App\Models\Ruangan;
 use App\Models\Pelaporan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Barang;
-use App\Models\User;
+use App\Models\Transak;
 use Yajra\DataTables\Facades\DataTables;
 
 class LaporanController extends Controller
@@ -27,10 +29,7 @@ class LaporanController extends Controller
             $jenjang_id = auth()->user()->jenjang_id;
 
             if ($jenjang_id == null) {
-                $pelaporans = Pelaporan::with(['transak' => function ($query) {
-                    $query->with('barang:id,nama_barang,kode_barang,merk_model,ukuran,bahan,tahun_pembuatan_pembelian')
-                        ->with('ruangan:id,nama_ruangan');
-                }])
+                $pelaporans = Pelaporan::with(['transak.barang', 'transak.ruangan.jenjang'])
                     ->join('transaks', 'pelaporans.transak_id', '=', 'transaks.id')
                     ->join('barangs', 'transaks.barang_id', '=', 'barangs.id')
                     ->join('ruangans', 'transaks.ruangan_id', '=', 'ruangans.id')
@@ -48,20 +47,23 @@ class LaporanController extends Controller
                         'transaks.jml_mutasi',
                         'transaks.no_inventaris',
                         'jenjangs.nama_jenjang',
+                        'ruangans.jenjang_id'
                     );
 
+                if ($request->jenjang_id) {
+                    $pelaporans = $pelaporans->where('transak.ruangan.jenjang.jenjangs_id', $request->jenjang_id);
+                }
+
                 if ($request->ruangan_id) {
-                    $pelaporans = $pelaporans->where('transaks.ruangan_id', $request->ruangan_id);
+                    $pelaporans->where('transaks.ruangan_id', $request->ruangan_id);
                 }
 
                 if ($request->tahun_akademik) {
-                    $pelaporans = $pelaporans->where('transaks.tahun_akademik', $request->tahun_akademik);
+                    $pelaporans->where('transaks.tahun_akademik', $request->tahun_akademik);
                 }
             } else {
-                $pelaporans = Pelaporan::with(['transak' => function ($query) {
-                    $query->with('barang:id,nama_barang,kode_barang,merk_model,ukuran,bahan,tahun_pembuatan_pembelian')
-                        ->with('ruangan:id,nama_ruangan');
-                }])
+
+                $pelaporans = Pelaporan::with(['transak.barang', 'transak.ruangan.jenjang'])
                     ->join('transaks', 'pelaporans.transak_id', '=', 'transaks.id')
                     ->join('barangs', 'transaks.barang_id', '=', 'barangs.id')
                     ->join('ruangans', 'transaks.ruangan_id', '=', 'ruangans.id')
@@ -79,8 +81,11 @@ class LaporanController extends Controller
                         'transaks.tahun_akademik',
                         'transaks.jml_mutasi',
                         'transaks.no_inventaris',
-                        'jenjangs.nama_jenjang',
+                        'jenjangs.nama_jenjang'
                     );
+
+                //jika filter jenjang_id
+
 
                 if ($request->ruangan_id) {
                     $pelaporans = $pelaporans->where('transaks.ruangan_id', $request->ruangan_id);
@@ -92,6 +97,10 @@ class LaporanController extends Controller
             }
 
             return DataTables::of($pelaporans)
+                //nama_ruangan - nama_jenjang add kolom nama_ruangan
+                // ->addColumn('nama_ruangan', function ($row) {
+                //     return $row->nama_jenjang . ' - ' . $row->nama_ruangan;
+                // })
                 ->addColumn('nama_barang', function ($row) {
                     return $row->nama_barang ?? '';
                 })
@@ -110,8 +119,8 @@ class LaporanController extends Controller
                 ->addColumn('tahun_pembuatan_pembelian', function ($row) {
                     return $row->tahun_pembuatan_pembelian ?? '';
                 })
-                ->addColumn('ruangan', function ($row) {
-                    return $row->nama_ruangan ?? '';
+                ->addColumn('nama_ruangan', function ($row) {
+                    return  $row->nama_ruangan ?? '';
                 })
                 ->addColumn('tahun_akademik', function ($row) {
                     return $row->tahun_akademik ?? '';
@@ -128,7 +137,21 @@ class LaporanController extends Controller
 
         //get data semua ruangans
         $ruangans = Ruangan::all();
-        return view('laporans.index', compact('ruangans'));
+        $jenjangs = Jenjang::all(); 
+
+        $jenjang_id = auth()->user()->jenjang_id;
+
+        if($jenjang_id == null)
+        {
+        $tahun_akademiks = Transak::select('tahun_akademik')->distinct()->orderBy('tahun_akademik', 'desc')->get();
+        }
+        else
+        {
+            $tahun_akademiks = Transak::select('tahun_akademik')->distinct()->where
+            ('jenjang_id', $jenjang_id)->orderBy('tahun_akademik', 'desc')->get();
+        }
+
+        return view('laporans.index', compact('ruangans', 'jenjangs', 'tahun_akademiks'));
     }
 
     //fungsi print
@@ -152,6 +175,7 @@ class LaporanController extends Controller
                 ->join('transaks', 'pelaporans.transak_id', '=', 'transaks.id')
                 ->join('barangs', 'transaks.barang_id', '=', 'barangs.id')
                 ->join('ruangans', 'transaks.ruangan_id', '=', 'ruangans.id')
+                ->join('jenjangs', 'ruangans.jenjang_id', '=', 'jenjangs.id')
                 ->select(
                     'pelaporans.*',
                     'barangs.nama_barang',
@@ -166,6 +190,8 @@ class LaporanController extends Controller
                     'jenjangs.nama_jenjang',
                     'jenjangs.id as jenjang',
 
+
+
                 );
 
             if ($ruangan_id) {
@@ -175,7 +201,7 @@ class LaporanController extends Controller
             if ($tahun_akademik) {
                 $inventaris = $inventaris->where('transaks.tahun_akademik', $tahun_akademik);
             }
-            $inventaris = $inventaris->get(); // Pastikan data diambil dengan get()
+            $inventaris = $inventaris->get()->sortBy('nama_ruangan'); // Pastikan data diambil dengan get()
 
             $kepsek = Pegawai::join('users', 'pegawais.user_id', '=', 'users.id')
                 ->where('pegawais.jabatan', 'Kepala Yayasan')
@@ -222,7 +248,7 @@ class LaporanController extends Controller
                 $inventaris = $inventaris->where('transaks.tahun_akademik', $tahun_akademik);
             }
 
-            $inventaris = $inventaris->get();
+            $inventaris = $inventaris->get()->sortBy('nama_ruangan'); // Pastikan data diambil dengan get()
 
             $kepsek = Pegawai::join('users', 'pegawais.user_id', '=', 'users.id')
                 ->where('pegawais.jabatan', 'Kepala Sekolah')
@@ -239,12 +265,13 @@ class LaporanController extends Controller
             $sapras_name = $sapras ? $sapras->name : '';
         }
 
-        $namaSekolah = auth()->user()->jenjang->nama_sekolah;
+        // $namaSekolah = auth()->user()->jenjang->nama_sekolah;
 
-        if ($namaSekolah == null){
-            $namaSekolah = 'Pondok Pesantren DIY - Darul Qur\'an Wal Irsyad';
-        } else {
-            $namaSekolah = $namaSekolah;
+        $user = auth()->user();
+        $namaSekolah = 'Pondok Pesantren DIY - Darul Qur\'an Wal Irsyad'; // default value
+
+        if ($user && $user->jenjang && $user->jenjang->nama_sekolah) {
+            $namaSekolah = $user->jenjang->nama_sekolah;
         }
 
         return view('laporans.print', compact('inventaris', 'ruangan', 'tahun_akademik', 'kepsek_name', 'sapras_name', 'namaSekolah'));

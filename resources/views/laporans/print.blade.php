@@ -105,7 +105,7 @@
         <table class="info-table">
             <tr>
                 <td class="label">NAMA SEKOLAH</td>
-                <td>: MA DARUL QUR'AN WONOSARI</td>
+                <td>: {{ $namaSekolah }}</td>
             </tr>
             <tr>
                 <td class="label">KECAMATAN</td>
@@ -193,7 +193,7 @@
     </div>
 
     <div class="footer">
-        <p>&copy; {{ date('Y') }} MA DARUL QUR'AN WONOSARI. All rights reserved.</p>
+        <p>&copy; {{ date('Y') }} DARUL QUR'AN WONOSARI. All rights reserved.</p>
     </div>
 
     <script>

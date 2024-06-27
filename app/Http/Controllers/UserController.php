@@ -73,19 +73,27 @@ class UserController extends Controller
         $attr = $request->validated();
 
         if ($request->file('avatar') && $request->file('avatar')->isValid()) {
+            $path = storage_path('app/public/uploads/avatars');
+            $originalFilename = $request->file('avatar')->getClientOriginalName();
 
-            $filename = $request->file('avatar')->hashName();
-
-            if (!file_exists($folder = public_path($this->avatarPath))) {
-                mkdir($folder, 0777, true);
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
             }
 
-            Image::make($request->file('avatar')->getRealPath())->resize(500, 500, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            })->save($this->avatarPath . $filename);
+            $mimeType = $request->file('avatar')->getMimeType();
 
-            $attr['avatar'] = $filename;
+            if (strpos($mimeType, 'image') !== false) {
+                // Handle image file
+                Image::make($request->file('avatar')->getRealPath())->resize(500, 500, function ($constraint) {
+                    $constraint->upsize();
+                    $constraint->aspectRatio();
+                })->save($path . '/' . $originalFilename);
+            } else {
+                // Handle non-image file
+                $request->file('avatar')->move($path, $originalFilename);
+            }
+
+            $attr['avatar'] = $originalFilename;
         }
 
         $attr['password'] = bcrypt($request->password);

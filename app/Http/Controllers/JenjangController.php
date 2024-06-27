@@ -22,8 +22,15 @@ class JenjangController extends Controller
      */
     public function index(): \Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse
     {
+        //get jenjang_id dr user
+        $jenjang_id = auth()->user()->jenjang_id;
         if (request()->ajax()) {
+
+            if ($jenjang_id != null) {
+                $jenjangs = Jenjang::where('id', $jenjang_id)->get();
+            } else {
             $jenjangs = Jenjang::query();
+            }
 
             return DataTables::of($jenjangs)
                 ->addColumn('foto_jenjang', function ($row) {
@@ -79,7 +86,7 @@ class JenjangController extends Controller
             $attr['foto_jenjang'] = $originalFilename;
         }
 
-        // Jenjang::create($request->validated());
+        Jenjang::create($request->validated());
 
         return to_route('jenjangs.index')->with('success', __('The jenjang was created successfully.'));
     }

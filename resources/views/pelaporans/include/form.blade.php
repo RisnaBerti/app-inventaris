@@ -23,34 +23,36 @@
         <div class="col-md-12">
             <div class="form-group">
                 <label for="transak-id">{{ __('Transak') }}</label>
-                <select class="form-select @error('transak_id') is-invalid @enderror" name="transak_id" id="transak-id" required>
+                <select class="form-select @error('transak_id') is-invalid @enderror" name="transak_id" id="transak-id"
+                    required>
                     <option value="" selected disabled>-- {{ __('Select transak') }} --</option>
                     @foreach ($data as $transak)
-                        <option value="{{ $transak->id }}" {{ old('transak_id', $pelaporan->transak_id ?? '') == $transak->id ? 'selected' : '' }}>   
-                            {{ $transak->no_inventaris }} -                         
-                            {{ $transak->barang->nama_barang }} - 
-                            {{ $transak->barang->kode_barang }} - 
-                            {{ $transak->ruangan->jenjang->nama_jenjang ?? 'N/A' }} - 
-                            {{ $transak->ruangan->nama_ruangan }} - 
-                            {{ $transak->tahun_akademik }} - 
-                            {{ $transak->jml_mutasi }} - 
-                            {{ $transak->jenis_mutasi }} - 
+                        <option value="{{ $transak->id }}"
+                            {{ old('transak_id', $pelaporan->transak_id ?? '') == $transak->id ? 'selected' : '' }}>
+                            {{ $transak->ruangan->jenjang->nama_jenjang ?? 'N/A' }} -
+                            {{ $transak->no_inventaris }} -
+                            {{ $transak->barang->nama_barang }} -
+                            {{ $transak->barang->kode_barang }} -
+                            {{ $transak->ruangan->nama_ruangan }} -
+                            {{ $transak->tahun_akademik }} -
+                            {{ $transak->jml_mutasi }} -
+                            {{ $transak->jenis_mutasi }} -
                             {{ date('F/Y', strtotime($transak->periode)) }}
                         </option>
                     @endforeach
                 </select>
                 @error('transak_id')
-                <span class="text-danger">
-                    {{ $message }}
-                </span>
+                    <span class="text-danger">
+                        {{ $message }}
+                    </span>
                 @enderror
             </div>
         </div>
     </div>
-    
-    
-    
-    
+
+
+
+
     {{-- <div class="col-md-6">
         <div class="form-group">
             <label for="no-inventari">{{ __('No Inventaris') }}</label>

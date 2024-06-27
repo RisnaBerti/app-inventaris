@@ -137,7 +137,7 @@
                         if (data) {
                                 // Jika bukan PDF, maka asumsikan data adalah URL gambar
                                 return `
-                                        <img src="${data}" class="img-thumbnail" width="200" height="150" style="object-fit: cover alt="Dokumen Perencanaan"  >
+                                        <img src="${data}" class="img-thumbnail" width="50" height="50" style="object-fit: cover alt="Dokumen Perencanaan"  >
                                    `;
                         } else {
                             // Tampilkan placeholder jika data dokumen kosong

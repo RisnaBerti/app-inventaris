@@ -25,7 +25,7 @@ class UpdateUserRequest extends FormRequest
             'email' => ['required', 'email', 'unique:users,email,' . $this->user->id],
             'avatar' => ['nullable', 'image', 'max:1024'],
             'role' => ['required', 'exists:roles,id'],
-            'jenjang_id' => ['required', 'exists:jenjang,id'],
+            'jenjang_id' => ['required', 'exists:jenjangs,id'],
             'password' =>  [
                 'nullable',
                 'confirmed',

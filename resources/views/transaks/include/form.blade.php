@@ -18,14 +18,32 @@
             @enderror
         </div>
     </div> --}}
-    <div class="col-md-6">
+    {{-- <div class="col-md-6">
         <div class="form-group">
             <label for="barang-id">{{ __('Barang') }}</label>
             <select class="form-select @error('barang_id') is-invalid @enderror" name="barang_id" id="barang-id" required>
                 <option value="" selected disabled>-- {{ __('Select barang') }} --</option>
                 @foreach ($barangs as $barang)
                     <option value="{{ $barang->id }}" data-kategori="{{ $barang->kategori_barang }}" {{ isset($transak) && $transak->barang_id == $barang->id ? 'selected' : (old('barang_id') == $barang->id ? 'selected' : '') }}>
-                        {{ $barang->nama_barang }}
+                        {{ $barang->jenjang->nama_jenjang }} - {{ $barang->nama_barang }}
+                    </option>
+                @endforeach
+            </select>
+            @error('barang_id')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+    </div> --}}
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="barang-id">{{ __('barang') }}</label>
+            <select class="form-select @error('barang_id') is-invalid @enderror" name="barang_id" id="barang-id"
+                required>
+                <option value="" selected disabled>-- {{ __('Select barang') }} --</option>
+                @foreach ($data_barangs as $barang)
+                    <option value="{{ $barang->id }}" 
+                        {{ old('barang_id', $transak->barang_id ?? '') == $barang->id ? 'selected' : '' }}>
+                        {{ $barang->jenjang->nama_jenjang }} - {{ $barang->nama_barang }}
                     </option>
                 @endforeach
             </select>
@@ -57,7 +75,7 @@
     </div>
 
     <!-- No Inventaris -->
-    <div class="col-md-6">
+    {{-- <div class="col-md-6">
         <div class="form-group">
             <label for="no-inventaris">{{ __('No Inventaris') }}</label>
             <input type="text" name="no_inventaris" id="no-inventaris"
@@ -68,7 +86,7 @@
                 <span class="text-danger">{{ $message }}</span>     
             @enderror
         </div>
-    </div>
+    </div> --}}
 
     <!-- Jenis Pengadaan -->
     <div class="col-md-6">
@@ -189,7 +207,7 @@
     </div>
 
     <!-- QR Code -->
-    <div class="col-md-6">
+    {{-- <div class="col-md-6">
         <div class="form-group">
             <label for="qrcode">{{ __('QR Code') }}</label>
             <input type="text" name="qrcode" id="qrcode"
@@ -199,7 +217,7 @@
                 <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
-    </div>
+    </div> --}}
 </div>
 
 <!-- JavaScript for automatic No Inventaris generation -->

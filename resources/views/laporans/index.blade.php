@@ -24,24 +24,50 @@
 
             @can('pelaporan create')
                 <div class="row mb-4">
-                    <div class="col-md-3">
+                    {{-- pilih jenjang --}}
+                    {{-- <div class="col-md-3">
+                        <select name="jenjang_id" id="jenjang_id" class="form-control">
+                            <option value="">{{ __('Pilih Jenjang') }}</option>
+                            @foreach ($jenjangs as $jenjang)
+                                <option value="{{ $jenjang->id }}">{{ $jenjang->nama_jenjang }}</option>
+                            @endforeach
+                        </select>
+                        @if ($errors->has('jenjang_id'))
+                            <span class="text-danger">{{ $errors->first('jenjang_id') }}</span>
+                        @endif
+                    </div> --}}
+                    <div class="col-md-2">
                         <select name="ruangan_id" id="ruangan_id" class="form-control">
                             <option value="">{{ __('Pilih Ruangan') }}</option>
                             @foreach ($ruangans as $ruangan)
-                                <option value="{{ $ruangan->id }}">{{ $ruangan->nama_ruangan }}</option>
+                                <option value="{{ $ruangan->id }}">{{ $ruangan->jenjang->nama_jenjang }} -
+                                    {{ $ruangan->nama_ruangan }}</option>
                             @endforeach
                         </select>
                         @if ($errors->has('ruangan_id'))
                             <span class="text-danger">{{ $errors->first('ruangan_id') }}</span>
                         @endif
                     </div>
-                    <div class="col-md-3">
+
+                    <div class="col-md-2">
+                        <select name="tahun_akademik" id="tahun_akademik" class="form-control">
+                            <option value="">{{ __('Pilih Tahun Akademik') }}</option>
+                            @foreach ($tahun_akademiks as $transak)
+                                <option value="{{ $transak->tahun_akademik }}">{{ $transak->tahun_akademik }}</option>
+                            @endforeach
+                        </select>
+                        @if ($errors->has('tahun_akademik'))
+                            <span class="text-danger">{{ $errors->first('ruangan_id') }}</span>
+                        @endif
+                    </div>
+
+                    {{-- <div class="col-md-2">
                         <input type="text" name="tahun_akademik" id="tahun_akademik" class="form-control"
                             placeholder="Tahun Akademik">
                         @if ($errors->has('tahun_akademik'))
                             <span class="text-danger">{{ $errors->first('tahun_akademik') }}</span>
                         @endif
-                    </div>
+                    </div> --}}
 
                     <div class="col-md-3">
                         <button id="searchBtn" class="btn btn-primary mr-2">{{ __('Cari') }}</button>
@@ -61,7 +87,8 @@
                                     <thead>
                                         <tr>
                                             <th rowspan="2">{{ __('No') }}</th>
-                                            <th rowspan="2">{{ __('Tempat Simpan') }}</th>
+                                            <th rowspan="2">{{ __('Jenjang') }}</th>
+                                            <th rowspan="2">{{ __('Ruangan') }}</th>
                                             <th rowspan="2">{{ __('Nama Barang') }}</th>
                                             <th rowspan="2">{{ __('Kode Barang') }}</th>
                                             <th rowspan="2">{{ __('Merek/Model (Type)') }}</th>
@@ -120,8 +147,12 @@
                         searchable: false
                     },
                     {
-                        data: 'ruangan',
-                        name: 'ruangans.nama_ruangan'
+                        data: 'nama_jenjang',
+                        name: 'jenjangs.nama_jenjang'
+                    },
+                    {
+                        data: 'nama_ruangan',
+                        name: 'nama_ruangan'
                     },
                     {
                         data: 'nama_barang',

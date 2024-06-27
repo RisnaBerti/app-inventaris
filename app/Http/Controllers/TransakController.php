@@ -213,12 +213,20 @@ class TransakController extends Controller
      */
     public function create(): \Illuminate\Contracts\View\View
     {
-        // Assuming $transak needs to be initialized here
-        $transak = new Transak();
-        $barangs = Barang::all();
-        $data = Ruangan::with('jenjang')->get();
+        //get jenjang_id dari user
+        $jenjang_id = auth()->user()->jenjang_id;
 
-        return view('transaks.create', compact('data', 'transak', 'barangs'));
+        if ($jenjang_id == null) {
+            $transak = new Transak();
+            $data_barangs = Barang::with('jenjang')->get();
+            $data = Ruangan::with('jenjang')->get();
+        } else {
+            $transak = new Transak();
+            $data_barangs = Barang::with('jenjang')->where('jenjang_id', $jenjang_id)->get();
+            $data = Ruangan::with('jenjang')->where('jenjang_id', $jenjang_id)->get();
+        }
+
+        return view('transaks.create', compact('data', 'transak', 'data_barangs'));
     }
 
     /**
@@ -286,11 +294,25 @@ class TransakController extends Controller
      */
     public function edit(Transak $transak): \Illuminate\Contracts\View\View
     {
-        $transak->load('barang:id,nama_barang', 'ruangan:id,nama_ruangan');
+        //get jenjang_id dari user
+        $jenjang_id = auth()->user()->jenjang_id;
 
-        $data = Ruangan::with('jenjang')->get();
+        if ($jenjang_id == null) {
 
-        return view('transaks.edit', compact('transak', 'data'));
+            $transak->load('barang:id,nama_barang', 'ruangan:id,nama_ruangan');
+            $data = Ruangan::with('jenjang')->get();
+            $data_barangs = Barang::with('jenjang')->get();
+
+        } else {
+
+            $transak->load('barang:id,nama_barang', 'ruangan:id,nama_ruangan');
+            $data_barangs = Barang::with('jenjang')->where('jenjang_id', $jenjang_id)->get();
+            $data = Ruangan::with('jenjang')->where('jenjang_id', $jenjang_id)->get();
+            
+        }
+
+
+        return view('transaks.edit', compact('transak', 'data', 'data_barangs'));
     }
 
     /**
